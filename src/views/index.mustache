@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dance Class Booking</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <!-- Top Bar -->
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/calendar">Calendar</a></li>
+        </ul>
+        <ul class="right">
+            {{#isGuest}}
+                <li><a href="/users/login">Organiser Sign In</a></li>
+            {{/isGuest}}
+            {{#isOrganizer}}
+                <li><a href="/manage-classes">Manage Classes</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/users/logout">Sign Out</a></li>
+            {{/isOrganizer}}
+            {{#isAdmin}}
+                <li><a href="/admin">Admin Console</a></li>
+                <li><a href="/users/logout">Sign Out</a></li>
+            {{/isAdmin}}
+        </ul>
+    </nav>
+
+    <!-- Featured Classes Section -->
+    <section class="featured-classes">
+        <h2>Featured Classes</h2>
+        <div class="class-list">
+            {{#classes}}
+                <div class="class-card">
+                    <h3>{{name}}</h3>
+                    <p><strong>Type:</strong> {{type}}</p>
+                    <p><strong>Location:</strong> {{location}}</p>
+                    <a href="/calendar?class={{name}}">View Schedule</a>
+                </div>
+            {{/classes}}
+        </div>
+    </section>
+
+</body>
+</html>
