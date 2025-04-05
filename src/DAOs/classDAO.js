@@ -1,40 +1,54 @@
-const Datastore = require('gray-nedb');
-const path = require('path');
+const Datastore = require("gray-nedb");
 
 class ClassDAO {
   constructor() {
-    this.classDB = new Datastore({
-      filename: path.join(__dirname, '../database/classes.db'),
-      autoload: true
+    this.db = new Datastore({ filename: "./db/classes.db", autoload: true });
+  }
+
+  // Takes a single class or a array of classes and inserts them into the database
+  async insert(classes) {
+    return new Promise((resolve, reject) => {
+      // If classes is an array, insert all at once
+      if (Array.isArray(classes)) {
+        this.db.insert(classes, (err, newDocs) => {
+          if (err) reject(err);
+          resolve(newDocs);
+        });
+      } else {
+        this.db.insert(classes, (err, newDoc) => {
+          if (err) reject(err);
+          resolve(newDoc);
+        });
+      }
     });
   }
 
-  // Insert a Class
-  async insertClass(danceClass) {
+  // Find a class by its ID
+  async findById(id) {
     return new Promise((resolve, reject) => {
-      this.classDB.insert(danceClass, (err, newDoc) => {
+      this.db.findOne({ id }, (err, doc) => {
         if (err) reject(err);
-        else resolve(newDoc);
+        resolve(doc);
       });
     });
   }
 
-  // Retrieve all Classes
-  async getAllClasses() {
+  // Find all classes for a given course ID
+  async findByCourseId(courseId) {
     return new Promise((resolve, reject) => {
-      this.classDB.find({}, (err, docs) => {
+      this.db.find({ courseId }, (err, docs) => {
         if (err) reject(err);
-        else resolve(docs);
+        resolve(docs);
       });
     });
   }
 
-  // Retrieve classes by course
-  async getClassesByCourse(courseName) {
+  // Remove a class by its ID
+  async removeById(id) {
     return new Promise((resolve, reject) => {
-      this.classDB.find({ courseName }, (err, docs) => {
+      this.db.remove({ id }, {}, (err, numRemoved) => {
         if (err) reject(err);
-        else resolve(docs);
+        resolve(numRemoved);
       });
     });
   }

@@ -1,26 +1,40 @@
+const Datastore = require("gray-nedb");
+
 class CourseDAO {
-    constructor(db) {
-      this.db = db;
-    }
-  
-    async getNextCourseId() {
-      const courses = await this.getAllCourses();
-      const lastId = courses.length ? courses[courses.length - 1].id : "CO000";
-      const nextNumber = parseInt(lastId.replace("CO", "")) + 1;
-      return `CO${String(nextNumber).padStart(3, "0")}`;
-    }
-  
-    async insertCourse(course) {
-      await this.db.insert(course);
-    }
-  
-    async getAllCourses() {
-      return new Promise((resolve, reject) => {
-        this.db.find({}, (err, courses) => {
-          if (err) reject(err);
-          else resolve(courses);
-        });
-      });
-    }
+  constructor() {
+    this.db = new Datastore({ filename: "./db/courses.db", autoload: true });
   }
-  
+
+  // Insert a single course into the database
+  async insert(course) {
+    return new Promise((resolve, reject) => {
+      this.db.insert(course, (err, newDoc) => {
+        if (err) reject(err);
+        resolve(newDoc);
+      });
+    });
+  }
+
+  // Find a course by its ID
+  async findById(id) {
+    return new Promise((resolve, reject) => {
+      this.db.findOne({ id }, (err, doc) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
+  // Find all courses
+  async findAll() {
+    return new Promise((resolve, reject) => {
+      this.db.find({}, (err, docs) => {
+        if (err) reject(err);
+        resolve(docs);
+      });
+    });
+  }
+
+}
+
+module.exports = new CourseDAO();
