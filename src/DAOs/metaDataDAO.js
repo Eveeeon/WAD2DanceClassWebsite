@@ -5,72 +5,53 @@ class MetadataDAO {
     this.db = new Datastore({ filename: "./db/metadata.db", autoload: true });
   }
 
-  // Retrieve and increment the next available course ID
   async getNextCourseId() {
-    const doc = await this._getOrInitializeTracker();
-    const nextCourseId = doc.nextCourseId;
-    const nextCourseNumber = parseInt(nextCourseId.replace("CO", "")) + 1;
-    const newCourseId = `CO${String(nextCourseNumber).padStart(3, "0")}`;
-
-    await this.updateNextCourseId(newCourseId);
-    return newCourseId;
+    const tracker = await this._getOrCreateSingleTracker("course_id_tracker", "CO001");
+    const nextId = tracker.nextId;
+    const next = this._incrementId(nextId, "CO");
+    await this._updateTrackerId("course_id_tracker", next);
+    return nextId;
   }
 
-  // Retrieve and increment the next available class ID
   async getNextClassId() {
-    const doc = await this._getOrInitializeTracker();
-    const nextClassId = doc.nextClassId;
-    const nextClassNumber = parseInt(nextClassId.replace("CL", "")) + 1;
-    const newClassId = `CL${String(nextClassNumber).padStart(3, "0")}`;
-
-    await this.updateNextClassId(newClassId);
-    return newClassId;
+    const tracker = await this._getOrCreateSingleTracker("class_id_tracker", "CL001");
+    const nextId = tracker.nextId;
+    const next = this._incrementId(nextId, "CL");
+    await this._updateTrackerId("class_id_tracker", next);
+    return nextId;
   }
 
-  // Initialize the metadata collection if it doesn't exist
-  async _getOrInitializeTracker() {
-    let doc = await this._findTracker();
-    if (!doc) {
-      doc = await this._initializeMetadata();
-    }
-    return doc;
+  _incrementId(currentId, prefix) {
+    const num = parseInt(currentId.replace(prefix, ""), 10) + 1;
+    return `${prefix}${String(num).padStart(3, "0")}`;
   }
 
-  // Find the tracker document
-  _findTracker() {
+  _getOrCreateSingleTracker(trackerId, initialValue) {
     return new Promise((resolve, reject) => {
-      this.db.findOne({ _id: "id_tracker" }, (err, doc) => {
-        if (err) reject(err);
-        resolve(doc);
+      this.db.findOne({ _id: trackerId }, (err, tracker) => {
+        if (err) return reject(err);
+        if (tracker) return resolve(tracker);
+
+        this.db.insert({ _id: trackerId, nextId: initialValue }, (insertErr, newTracker) => {
+          if (insertErr?.errorType === "uniqueViolated") {
+            this.db.findOne({ _id: trackerId }, (retryErr, existingTracker) => {
+              if (retryErr) return reject(retryErr);
+              resolve(existingTracker);
+            });
+          } else if (insertErr) {
+            return reject(insertErr);
+          } else {
+            resolve(newTracker);
+          }
+        });
       });
     });
   }
 
-  // Initialize the metadata collection
-  _initializeMetadata() {
+  _updateTrackerId(trackerId, nextId) {
     return new Promise((resolve, reject) => {
-      this.db.insert({ _id: "id_tracker", nextCourseId: "CO001", nextClassId: "CL001" }, (err, newDoc) => {
-        if (err) reject(err);
-        resolve(newDoc);
-      });
-    });
-  }
-
-  // Update the next available course ID
-  updateNextCourseId(nextCourseId) {
-    return new Promise((resolve, reject) => {
-      this.db.update({ _id: "id_tracker" }, { $set: { nextCourseId } }, {}, (err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
-  }
-
-  // Update the next available class ID
-  updateNextClassId(nextClassId) {
-    return new Promise((resolve, reject) => {
-      this.db.update({ _id: "id_tracker" }, { $set: { nextClassId } }, {}, (err) => {
-        if (err) reject(err);
+      this.db.update({ _id: trackerId }, { $set: { nextId } }, {}, (err) => {
+        if (err) return reject(err);
         resolve();
       });
     });

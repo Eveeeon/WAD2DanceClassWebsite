@@ -1,4 +1,5 @@
 const Datastore = require("gray-nedb");
+const metadataDAO = require("./metaDataDAO");
 
 class CourseDAO {
   constructor() {
@@ -7,6 +8,8 @@ class CourseDAO {
 
   // Insert a single course into the database
   async insert(course) {
+    const id = await metadataDAO.getNextCourseId();
+    course.id = id;
     return new Promise((resolve, reject) => {
       this.db.insert(course, (err, newDoc) => {
         if (err) reject(err);

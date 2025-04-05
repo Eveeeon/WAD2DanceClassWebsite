@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dance Courses</title>
+  <link rel="stylesheet" href="/css/main.css"/>
+</head>
+<body class="bg-light text-dark font-sans">
+  <main class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Explore Our Dance Courses</h1>
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{#courses}}
+      <article class="card bg-white shadow-md rounded-lg overflow-hidden p-4 focus:outline-none focus:ring-2 focus:ring-primary"
+               tabindex="{{tabIndex}}">
+        <header>
+          <h2 class="text-xl font-semibold mb-2">{{name}}</h2>
+        </header>
+        <p class="text-sm mb-1">{{formattedStartDate}}</p>
+        <p class="mb-2">{{description}}</p>
+        <footer>
+          <p class="text-sm text-secondary">Location: {{location}}</p>
+          <p class="text-sm text-secondary">Price: £{{price}}</p>
+          <a href="/courses/{{id}}" class="inline-block mt-2 text-primary hover:underline" aria-label="View details for {{name}}">View Details</a>
+        </footer>
+      </article>
+      {{/courses}}
+    </section>
+  </main>
+</body>
+</html>

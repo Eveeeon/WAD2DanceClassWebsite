@@ -6,7 +6,8 @@
     "start": "nodemon src/index.js",
     "dev": "concurrently \"npm run sass\" \"npm run start\"",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "sass": "sass --watch scss:src/public/css"
+    "sass": "sass --watch scss:src/public/css",
+    "dummyData": "node src/scripts/dummyData.js"
   },
   "keywords": [],
   "author": "Eve Bury",
@@ -22,6 +23,7 @@
     "gray-nedb": "^1.8.3",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.30.1",
     "mustache-express": "^1.3.2"
   },
   "devDependencies": {

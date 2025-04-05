@@ -1,5 +1,3 @@
-const metadataDAO = new metadataDAO();
-
 class Course {
   constructor(
     name,
@@ -11,7 +9,7 @@ class Course {
     startDate,
     classIds = []
   ) {
-    this.id = metadataDAO.getNextCourseId();
+    this.id = null; // To be set when inserted into the database
     this.name = name;
     this.description = description;
     this.type = type; // Recurring or Workshop

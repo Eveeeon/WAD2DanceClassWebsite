@@ -1,5 +1,3 @@
-const metadataDAO = new metadataDAO();
-
 class DanceClass {
   constructor(
     name,
@@ -10,7 +8,7 @@ class DanceClass {
     price,
     courseId
   ) {
-    this.id = metadataDAO.getNextClassId();
+    this.id = null; // To be set when inserted into the database
     this.name = name;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;

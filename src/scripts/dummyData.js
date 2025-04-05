@@ -1,7 +1,7 @@
 const {
   generateRecurringCourse,
   generateWorkshopCourse,
-} = require("../middleware/courseGenerator");
+} = require("../middleware/generateCourses.js");
 
 const locations = [
   "Town Hall, Jiggington, 00000",
@@ -83,14 +83,16 @@ recurringCourses.forEach((course) => {
 
 // Workshop Course
 const workshopStartDate = "2025-05-10";
-
+let fullPrice = 100;
+let classPrice = 20;
+let length = 90;
 generateWorkshopCourse(
   "Freestyle Dance Workshop",
   "A weekend of expressive freestyle dance.",
   locations[1],
-  100, // full price
-  20, // single class price
-  90, // length
+  fullPrice,
+  classPrice,
+  length,
   workshopStartDate
 );
 

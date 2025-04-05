@@ -1,11 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const homeController = require("../controllers/homeController");
 
-// Landing Page Route
-router.get('/', (req, res) => {
-  const userRole = req.session.userRole || 'guest';
-
-  res.render('index', { userRole });
-});
+router.get("/", homeController.showHomePage);
 
 module.exports = router;

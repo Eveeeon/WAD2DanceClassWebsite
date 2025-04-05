@@ -1,26 +1,47 @@
 const Datastore = require("gray-nedb");
+const metadataDAO = require("./metaDataDAO");
 
 class ClassDAO {
   constructor() {
     this.db = new Datastore({ filename: "./db/classes.db", autoload: true });
   }
 
-  // Takes a single class or a array of classes and inserts them into the database
+  // Takes a single class or an array of classes and inserts them into the database
   async insert(classes) {
-    return new Promise((resolve, reject) => {
-      // If classes is an array, insert all at once
-      if (Array.isArray(classes)) {
-        this.db.insert(classes, (err, newDocs) => {
+    // Handle array of classes
+    if (Array.isArray(classes)) {
+      // Get IDs for all classes at once
+      const promises = classes.map(async (danceClass) => {
+        const id = await metadataDAO.getNextClassId();
+        danceClass.id = id;
+        return danceClass;
+      });
+      
+      // Wait for all IDs to be assigned
+      const classesWithIds = await Promise.all(promises);
+      
+      // Insert all classes at once
+      return new Promise((resolve, reject) => {
+        this.db.insert(classesWithIds, (err, newDocs) => {
           if (err) reject(err);
           resolve(newDocs);
         });
-      } else {
+      });
+    } 
+    // Handle single class
+    else {
+      // Get ID for the class
+      const id = await metadataDAO.getNextClassId();
+      classes.id = id;
+      
+      // Insert the class
+      return new Promise((resolve, reject) => {
         this.db.insert(classes, (err, newDoc) => {
           if (err) reject(err);
           resolve(newDoc);
         });
-      }
-    });
+      });
+    }
   }
 
   // Find a class by its ID
