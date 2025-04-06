@@ -8,7 +8,6 @@ class DanceClass {
     price,
     courseId
   ) {
-    this.id = null; // To be set when inserted into the database
     this.name = name;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;

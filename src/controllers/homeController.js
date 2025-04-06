@@ -1,4 +1,4 @@
-const courseDAO = require("../DAOs/courseDAO");
+const courseDAO = require("../DAOs/CourseDAO.js");
 const moment = require("moment");
 
 const getHome = async (req, res) => {

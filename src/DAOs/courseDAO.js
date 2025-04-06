@@ -1,34 +1,39 @@
 const Datastore = require("gray-nedb");
-const metadataDAO = require("./metaDataDAO");
 
 class CourseDAO {
   constructor() {
     this.db = new Datastore({ filename: "./db/courses.db", autoload: true });
   }
 
-  // Insert a single course into the database
   async insert(course) {
-    const id = await metadataDAO.getNextCourseId();
-    course.id = id;
     return new Promise((resolve, reject) => {
       this.db.insert(course, (err, newDoc) => {
         if (err) reject(err);
+        this.db.persistence.compactDatafile();
         resolve(newDoc);
       });
     });
   }
 
-  // Find a course by its ID
+  async updateClassIds(courseId, classIds) {
+    return new Promise((resolve, reject) => {
+      this.db.update({ _id: courseId }, { $set: { classIds } }, {}, (err, numAffected) => {
+        if (err) reject(err);
+        this.db.persistence.compactDatafile();
+        resolve(numAffected);
+      });
+    });
+  }
+
   async findById(id) {
     return new Promise((resolve, reject) => {
-      this.db.findOne({ id }, (err, doc) => {
+      this.db.findOne({ _id: id }, (err, doc) => {
         if (err) reject(err);
         resolve(doc);
       });
     });
   }
 
-  // Find all courses
   async findAll() {
     return new Promise((resolve, reject) => {
       this.db.find({}, (err, docs) => {
@@ -37,7 +42,6 @@ class CourseDAO {
       });
     });
   }
-
 }
 
 module.exports = new CourseDAO();

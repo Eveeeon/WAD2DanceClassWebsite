@@ -1,12 +1,10 @@
 const moment = require("moment");
-const classDAO = require("../DAOs/classDAO.js");
-const courseDAO = require("../DAOs/courseDAO.js");
-const DanceClass = require("../models/classModel.js");
-const Course = require("../models/courseModel.js");
-console.log("Course type:", typeof Course); 
+const classDAO = require("../DAOs/ClassDAO.js");
+const courseDAO = require("../DAOs/CourseDAO.js");
+const DanceClass = require("../models/ClassModel.js");
+const Course = require("../models/CourseModel.js");
 
-// Automatically creates all classes for a recurring course with one class per week on the same day and same time
-function generateRecurringCourse(
+async function generateRecurringCourse(
   name,
   description,
   location,
@@ -17,7 +15,7 @@ function generateRecurringCourse(
   startDate,
   time
 ) {
-  const classes = [];
+  const [hour, minute] = time.split(":").map(Number);
 
   const course = new Course(
     name,
@@ -29,7 +27,9 @@ function generateRecurringCourse(
     startDate
   );
 
-  const [hour, minute] = time.split(":").map(Number);
+  const insertedCourse = await courseDAO.insert(course);
+
+  const classes = [];
 
   for (let i = 0; i < durationWeeks; i++) {
     const classStartDateTime = moment(startDate)
@@ -51,22 +51,21 @@ function generateRecurringCourse(
       description,
       location,
       pricePerClass,
-      course.id
+      insertedCourse._id // use NeDB's _id
     );
 
     classes.push(danceClass);
   }
 
-  course.classIds = classes.map((c) => c.id);
+  const insertedClasses = await classDAO.insert(classes);
+  const classIds = insertedClasses.map((c) => c._id);
 
-  courseDAO.insert(course);
-  classDAO.insert(classes);
+  await courseDAO.updateClassIds(insertedCourse._id, classIds);
 
-  return course;
+  return insertedCourse;
 }
 
-// Automatically creates all classes for a weekend workshop course
-function generateWorkshopCourse(
+async function generateWorkshopCourse(
   name,
   description,
   location,
@@ -75,7 +74,6 @@ function generateWorkshopCourse(
   classLength,
   startDate
 ) {
-  const classes = [];
   const course = new Course(
     name,
     description,
@@ -86,63 +84,45 @@ function generateWorkshopCourse(
     startDate
   );
 
-  const saturdayClasses = [
-    { time: "10:00", dateOffset: 0 },
-    { time: "12:00", dateOffset: 2 },
-    { time: "15:00", dateOffset: 4 },
+  const insertedCourse = await courseDAO.insert(course);
+  const classes = [];
+
+  const sessions = [
+    { time: "10:00", offset: 0 },
+    { time: "12:00", offset: 2 },
+    { time: "15:00", offset: 4 },
+    { time: "11:00", offset: 5 },
+    { time: "15:00", offset: 7 },
   ];
 
-  const sundayClasses = [
-    { time: "11:00", dateOffset: 5 },
-    { time: "15:00", dateOffset: 7 },
-  ];
-
-  saturdayClasses.forEach((session, index) => {
-    const classStartDate = moment(startDate)
-      .add(session.dateOffset, "days")
+  sessions.forEach((session, index) => {
+    const classStart = moment(startDate)
+      .add(session.offset, "days")
       .set("hour", parseInt(session.time.split(":")[0]))
       .set("minute", parseInt(session.time.split(":")[1]))
       .toDate();
+
+    const classEnd = moment(classStart).add(classLength, "minutes").toDate();
+
     const danceClass = new DanceClass(
       `Workshop Class ${index + 1}`,
-      classStartDate,
-      moment(classStartDate).add(classLength, "minutes").toDate(),
+      classStart,
+      classEnd,
       description,
       location,
       pricePerClass,
-      course.id
+      insertedCourse._id
     );
 
     classes.push(danceClass);
   });
 
-  sundayClasses.forEach((session, index) => {
-    const classStartDate = moment(startDate)
-      .add(session.dateOffset, "days")
-      .set("hour", parseInt(session.time.split(":")[0]))
-      .set("minute", parseInt(session.time.split(":")[1]))
-      .toDate();
-    const danceClass = new DanceClass(
-      `Workshop Class ${index + 4}`,
-      classStartDate,
-      moment(classStartDate).add(classLength, "minutes").toDate(),
-      description,
-      location,
-      pricePerClass,
-      course.id
-    );
+  const insertedClasses = await classDAO.insert(classes);
+  const classIds = insertedClasses.map((c) => c._id);
 
-    classes.push(danceClass);
-  });
+  await courseDAO.updateClassIds(insertedCourse._id, classIds);
 
-  // Add class IDs to the course
-  course.classIds = classes.map((c) => c.id);
-
-  // Insert course and classes into the DB
-  courseDAO.insert(course);
-  classDAO.insert(classes);
-
-  return course;
+  return insertedCourse;
 }
 
 module.exports = {
