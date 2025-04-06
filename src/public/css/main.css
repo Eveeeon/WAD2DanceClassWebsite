@@ -110,7 +110,7 @@ main {
 }
 
 .navbar {
-  background-color: #4C51BF;
+  background-color: #1e8ec2;
   color: #ffffff;
   padding: 1rem 2rem;
 }
@@ -139,7 +139,7 @@ main {
   transition: background-color 0.3s ease;
 }
 .navbar .navbar-link:hover {
-  background-color: #3C3E9E;
+  background-color: #3c729e;
   border-radius: 4px;
 }
 .navbar .navbar-auth {
@@ -166,6 +166,59 @@ main {
 .site-footer p {
   margin: 0;
   font-size: 0.9rem;
+}
+
+.about {
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.about_intro {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+.about_intro h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+.about_intro p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.about_intro a {
+  color: #1e8ec2;
+  text-decoration: underline;
+}
+.about_faq h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.faq_item {
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.faq_question {
+  width: 100%;
+  text-align: left;
+  padding: 1rem;
+  background-color: #f2f2f2;
+  font-weight: bold;
+  cursor: pointer;
+}
+.faq_answer {
+  padding: 1rem;
+  background-color: white;
+}
+.faq_answer.hidden {
+  display: none;
 }
 
 /*# sourceMappingURL=main.css.map */

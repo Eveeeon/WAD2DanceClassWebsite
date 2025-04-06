@@ -1,8 +1,6 @@
-// _navbar.scss
-$primary-color: #4C51BF; // Indigo background for the navbar
-$white-color: #ffffff;
+@use "_variables" as *;
 $nav-link-color: #ffffff;
-$nav-hover-color: #3C3E9E; // A darker shade of indigo for hover state
+$nav-hover-color: #3c729e; // A darker shade of indigo for hover state
 $spacing: 1.5rem;
 $font-size: 1.125rem; // Text size for links
 

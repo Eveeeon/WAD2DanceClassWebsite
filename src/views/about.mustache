@@ -1,0 +1,36 @@
+<html>
+<head>
+  {{> header}}
+</head>
+<body>
+  {{> navBar}}
+
+  <main class="about">
+    <section class="about_intro">
+      <h2>About Our Dance Platform</h2>
+      <p>
+        Signing up is simple! Go to the <a href="/calendar">Calendar</a>, switch between course or class view,
+        click on the one you want, register your name, and enter your email for verification. Easy as that!
+      </p>
+    </section>
+
+    <section class="about_faq">
+      <h3>Frequently Asked Questions</h3>
+
+      <div class="faq">
+        {{#faqs}}
+        <div class="faq_item">
+          <button class="faq_question">{{question}}</button>
+          <div class="faq_answer hidden">{{answer}}</div>
+        </div>
+        {{/faqs}}
+      </div>
+    </section>
+  </main>
+
+  {{> footer}}
+
+<script src="/js/about.js"></script>
+
+</body>
+</html>
