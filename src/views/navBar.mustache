@@ -1,0 +1,24 @@
+<header class="navbar">
+  <div class="navbar-container">
+    <h1 class="navbar-title">Dance Classes</h1>
+    <nav class="navbar-links">
+      <a href="/" class="navbar-link">Home</a>
+      <a href="/about" class="navbar-link">About Us</a>
+      <a href="/calendar" class="navbar-link">Calendar</a>
+
+      {{#isSignedIn}}
+        <div class="navbar-auth navbar-signed-in">
+          <a href="/manage-classes" class="navbar-link">Manage Classes</a>
+          <a href="/profile" class="navbar-link">Profile</a>
+          <a href="/sign-out" class="navbar-link">Sign Out</a>
+        </div>
+      {{/isSignedIn}}
+
+      {{^isSignedIn}}
+        <div class="navbar-auth navbar-sign-in">
+          <a href="/sign-in" class="navbar-link">Sign In</a>
+        </div>
+      {{/isSignedIn}}
+    </nav>
+  </div>
+</header>

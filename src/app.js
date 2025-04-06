@@ -11,16 +11,16 @@ dotenv.config();
 
 const app = express();
 
-// Security & middleware
+// Security & middleware libraries
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Static files
+// Public
 app.use(express.static(path.join(__dirname, "public")));
 
-// View engine
+// Mustache
 app.engine("mustache", mustacheExpress());
 app.set("view engine", "mustache");
 app.set("views", path.join(__dirname, "views"));

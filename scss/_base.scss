@@ -1,0 +1,53 @@
+@use "variables" as *;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+// Global font and base styling
+body {
+  font-family: "Arial", sans-serif;
+  background-color: $bg-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+// Links
+a {
+  text-decoration: none;
+  color: inherit;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// Styling for headers
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Arial", sans-serif;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+}
+
+// Main container for layout
+.container {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+// Push footer to the bottom
+main {
+  flex: 1;
+}

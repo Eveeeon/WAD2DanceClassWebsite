@@ -87,7 +87,7 @@ let fullPrice = 100;
 let classPrice = 20;
 let length = 90;
 generateWorkshopCourse(
-  "Freestyle Dance Workshop",
+  "Freestyle Dance",
   "A weekend of expressive freestyle dance.",
   locations[1],
   fullPrice,

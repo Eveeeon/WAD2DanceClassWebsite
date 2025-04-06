@@ -105,7 +105,7 @@ async function generateWorkshopCourse(
     const classEnd = moment(classStart).add(classLength, "minutes").toDate();
 
     const danceClass = new DanceClass(
-      `Workshop Class ${index + 1}`,
+      `${course.name} Workshop Class ${index + 1}`,
       classStart,
       classEnd,
       description,

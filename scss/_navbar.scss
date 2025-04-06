@@ -1,0 +1,59 @@
+// _navbar.scss
+$primary-color: #4C51BF; // Indigo background for the navbar
+$white-color: #ffffff;
+$nav-link-color: #ffffff;
+$nav-hover-color: #3C3E9E; // A darker shade of indigo for hover state
+$spacing: 1.5rem;
+$font-size: 1.125rem; // Text size for links
+
+.navbar {
+  background-color: $primary-color;
+  color: $white-color;
+  padding: 1rem 2rem;
+
+  .navbar-container {
+    max-width: 80rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-title {
+    color: $white-color;
+    font-size: 1.875rem;
+    font-weight: 600;
+  }
+
+  .navbar-links {
+    display: flex;
+    gap: $spacing;
+    align-items: center;
+  }
+
+  .navbar-link {
+    font-size: $font-size;
+    color: $white-color;
+    text-decoration: none;
+    padding: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+
+  .navbar-link:hover {
+    background-color: $nav-hover-color;
+    border-radius: 4px;
+  }
+
+  // Hide these sections based on authentication status
+  .navbar-auth {
+    display: none;
+  }
+
+  .navbar-sign-in {
+    display: block; // Show for non-signed in users
+  }
+
+  .navbar-signed-in {
+    display: block; // Show for signed-in users
+  }
+}
