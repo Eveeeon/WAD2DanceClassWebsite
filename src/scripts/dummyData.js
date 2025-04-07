@@ -3,17 +3,21 @@ const {
   generateWorkshopCourse,
 } = require("../middleware/generateCourses.js");
 
-const locations = [
+const locationDAO = require("../DAOs/locationDAO");
+
+// Define location data
+const locationStrings = [
   "Town Hall, Jiggington, 00000",
   "The Shake and Wave, Jigglesville, 00000",
   "The Move Zone, Jigglington, 00000",
 ];
 
+// Define course data (using indexes for location reference)
 const recurringCourses = [
   {
     name: "Beginner Salsa",
     description: "Learn the basics of Salsa.",
-    location: 1,
+    location: 0,
     courseCost: 100,
     classCost: 20,
     classLength: 60,
@@ -24,7 +28,7 @@ const recurringCourses = [
   {
     name: "Intermediate Tango",
     description: "Improve your Tango skills.",
-    location: 2,
+    location: 1,
     courseCost: 120,
     classCost: 28,
     classLength: 90,
@@ -35,7 +39,7 @@ const recurringCourses = [
   {
     name: "Advanced Hip-Hop",
     description: "For experienced Hip-Hop dancers.",
-    location: 3,
+    location: 2,
     courseCost: 200,
     classCost: 30,
     classLength: 40,
@@ -46,7 +50,7 @@ const recurringCourses = [
   {
     name: "Latin Fusion",
     description: "A mix of various Latin dances.",
-    location: 1,
+    location: 0,
     courseCost: 85,
     classCost: 15,
     classLength: 70,
@@ -57,7 +61,7 @@ const recurringCourses = [
   {
     name: "Swing Dance",
     description: "Get into the rhythm of Swing dancing.",
-    location: 2,
+    location: 1,
     courseCost: 110,
     classCost: 20,
     classLength: 50,
@@ -67,33 +71,48 @@ const recurringCourses = [
   },
 ];
 
-recurringCourses.forEach((course) => {
-  generateRecurringCourse(
-    course.name,
-    course.description,
-    locations[course.location],
-    course.courseCost,
-    course.classCost,
-    course.classLength,
-    course.durationWeeks,
-    course.startDate,
-    course.time
-  );
-});
+const seed = async () => {
+  try {
+    // Insert all locations
+    const insertedLocations = await Promise.all(
+      locationStrings.map(address => locationDAO.insert({ address }))
+    );
 
-// Workshop Course
-const workshopStartDate = "2025-05-10";
-let fullPrice = 100;
-let classPrice = 20;
-let length = 90;
-generateWorkshopCourse(
-  "Freestyle Dance",
-  "A weekend of expressive freestyle dance.",
-  locations[1],
-  fullPrice,
-  classPrice,
-  length,
-  workshopStartDate
-);
+    // Generate recurring courses with real location objects
+    for (const course of recurringCourses) {
+      const loc = insertedLocations[course.location];
+      await generateRecurringCourse(
+        course.name,
+        course.description,
+        loc.address,
+        course.courseCost,
+        course.classCost,
+        course.classLength,
+        course.durationWeeks,
+        course.startDate,
+        course.time
+      );
+    }
 
-console.log("Dummy data has been added to the database.");
+    // Add the workshop
+    const workshopStartDate = "2025-05-10";
+    const fullPrice = 100;
+    const classPrice = 20;
+    const length = 90;
+    await generateWorkshopCourse(
+      "Freestyle Dance",
+      "A weekend of expressive freestyle dance.",
+      insertedLocations[1].address,
+      fullPrice,
+      classPrice,
+      length,
+      workshopStartDate
+    );
+
+    console.log("Dummy data has been added to the database.");
+  } catch (err) {
+    console.error("Error inserting dummy data:", err);
+  }
+};
+
+seed();
