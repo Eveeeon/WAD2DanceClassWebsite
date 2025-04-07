@@ -4,33 +4,37 @@
 </head>
 <body>
   {{> navBar}}
-
   <main class="about">
     <section class="about_intro">
-      <h2>About Our Dance Platform</h2>
+      <h2>{{aboutInfo.title}}</h2>
       <p>
-        Signing up is simple! Go to the <a href="/calendar">Calendar</a>, switch between course or class view,
-        click on the one you want, register your name, and enter your email for verification. Easy as that!
+        {{{aboutInfo.description}}}
       </p>
     </section>
-
+    <section class="about_locations">
+      <h3>Our Locations</h3>
+      <ul class="location-list">
+        {{#locations}}
+        <li class="location-item">
+          <h4>{{name}}</h4>
+          <p>{{address}}</p>
+        </li>
+        {{/locations}}
+      </ul>
+    </section>
     <section class="about_faq">
       <h3>Frequently Asked Questions</h3>
-
       <div class="faq">
         {{#faqs}}
-        <div class="faq_item">
-          <button class="faq_question">{{question}}</button>
-          <div class="faq_answer hidden">{{answer}}</div>
+        <div class="faq-item">
+          <button class="faq-question">{{question}}</button>
+          <div class="faq-answer hidden">{{answer}}</div>
         </div>
         {{/faqs}}
       </div>
     </section>
   </main>
-
   {{> footer}}
-
-<script src="/js/about.js"></script>
-
+  <script src="/js/about.js"></script>
 </body>
 </html>
