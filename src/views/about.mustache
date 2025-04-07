@@ -4,14 +4,16 @@
 </head>
 <body>
   {{> navBar}}
+
   <main class="about">
-    <section class="about_intro">
+    <section class="about-intro">
       <h2>{{aboutInfo.title}}</h2>
       <p>
         {{{aboutInfo.description}}}
       </p>
     </section>
-    <section class="about_locations">
+
+    <section class="about-locations">
       <h3>Our Locations</h3>
       <ul class="location-list">
         {{#locations}}
@@ -22,8 +24,10 @@
         {{/locations}}
       </ul>
     </section>
-    <section class="about_faq">
+
+    <section class="about-faq">
       <h3>Frequently Asked Questions</h3>
+
       <div class="faq">
         {{#faqs}}
         <div class="faq-item">
@@ -34,7 +38,9 @@
       </div>
     </section>
   </main>
+
   {{> footer}}
+
   <script src="/js/about.js"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const faqItems = document.querySelectorAll(".faq_item");
+    const faqItems = document.querySelectorAll(".faq-item");
   
     faqItems.forEach((item) => {
-      const question = item.querySelector(".faq_question");
+      const question = item.querySelector(".faq-question");
   
       question.addEventListener("click", () => {
-        const answer = item.querySelector(".faq_answer");
+        const answer = item.querySelector(".faq-answer");
   
         // Toggle visibility of the answer
         answer.classList.toggle("hidden");
