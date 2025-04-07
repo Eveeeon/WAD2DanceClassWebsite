@@ -8,6 +8,12 @@
 <main class="page class-page">
   <h2>Dance Classes</h2>
 
+  <div class="month-nav">
+    <a href="/classes/prev?month={{currentMonth}}" class="prev-month">&#8592;</a>
+    <span class="current-month">{{currentMonth}}</span>
+    <a href="/classes/next?month={{currentMonth}}" class="next-month">&#8594;</a>
+  </div>
+
   <div class="filters">
     <select id="courseFilter">
       <option value="">All Courses</option>
@@ -43,7 +49,7 @@
     {{/classes}}
 
     {{^classes}}
-      <p class="no-items">No classes available at the moment.</p>
+      <p class="no-items">No classes available.</p>
     {{/classes}}
   </div>
 </main>

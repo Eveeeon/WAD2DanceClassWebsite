@@ -10,6 +10,7 @@ router.get("/about", aboutController.getAbout);
 router.get("/courses", courseController.getCourses);
 router.post("/courses/register", courseController.registerForCourse);
 router.get("/classes", classController.getClasses);
+router.get("/classes/:direction", classController.changeMonth);
 router.post("/classes/register", classController.registerForClass);
 
 

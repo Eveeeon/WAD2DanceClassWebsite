@@ -53,13 +53,13 @@ main {
 .page h2 {
   font-size: 1.75rem;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: #333333;
 }
 .page .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 @media (min-width: 600px) {
   .page .grid {
@@ -73,30 +73,26 @@ main {
 }
 .page .card {
   background: #ffffff;
-  padding: 1.5rem;
-  border-radius: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.375rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   outline: none;
 }
 .page .card h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 .page .card .description {
   color: #555;
-  margin-bottom: 0.5rem;
-}
-.page .card .start-date {
-  color: #777;
   margin-bottom: 1rem;
 }
 .page .card button {
   background: #1e8ec2;
   color: #ffffff;
   border: none;
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
   cursor: pointer;
   transition: background 0.3s;
 }
@@ -107,6 +103,50 @@ main {
   grid-column: 1/-1;
   text-align: center;
   color: #999;
+}
+.page .filters {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.page .filters select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333333;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.page .filters select:focus {
+  border-color: #1e8ec2;
+  box-shadow: 0 0 4px rgba(30, 142, 194, 0.5);
+}
+.page .month-nav {
+  display: flex;
+  justify-content: center; /* Center the buttons */
+  align-items: center;
+  width: 100%; /* Ensure it takes full width of the container */
+  margin-bottom: 1rem;
+}
+.page .month-nav a {
+  background-color: #1e8ec2;
+  color: #ffffff;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  border-radius: 0.375rem;
+  transition: background 0.3s;
+}
+.page .month-nav a:hover {
+  background-color: rgb(23.1696428571, 109.6696428571, 149.8303571429);
+}
+.page .month-nav .current-month {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333333;
+  padding: 1rem;
 }
 
 .modal {
@@ -119,7 +159,7 @@ main {
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 1rem;
+  padding: 0.75rem;
 }
 .modal .modal-content {
   background-color: #fff;
@@ -132,7 +172,7 @@ main {
 }
 .modal .modal-content h3 {
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
 }
 .modal .modal-content p {
   margin-bottom: 1rem;
@@ -148,7 +188,7 @@ main {
   color: #333333;
 }
 .modal .modal-content form input {
-  padding: 0.5rem;
+  padding: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 0.375rem;
   font-size: 1rem;
@@ -167,12 +207,12 @@ main {
 }
 .modal .modal-content .close-btn {
   float: right;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   cursor: pointer;
   color: #aaa;
 }
 .modal .modal-content .close-btn:hover {
-  color: #333;
+  color: #333333;
 }
 
 .navbar {

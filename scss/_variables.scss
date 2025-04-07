@@ -1,3 +1,4 @@
+// Color Variables
 $primary-color: #1e8ec2;
 $secondary-color: #ffed4a;
 $text-color: #333333;
@@ -5,8 +6,21 @@ $white-color: #ffffff;
 $bg-color: #ffffff;
 $footer-bg-color: #2d4838;
 $header-bg-color: #4a5568;
-$border-radius: 0.375rem;
 $modal-bg-color: rgba(0, 0, 0, 0.7);
 $modal-content-bg: #fff;
-$modal-padding: 20px;
 $button-hover-bg: #45a049;
+
+// Spacing & Border
+$border-radius: 0.375rem;
+$modal-padding: 20px;
+$padding-large: 2rem;
+$padding-medium: 1rem;
+$padding-small: 0.75rem;
+$gap: 1.5rem;
+$gap-small: 1rem;
+
+// Font Sizes
+$font-size-large: 1.75rem;
+$font-size-medium: 1.25rem;
+$font-size-small: 1rem;
+$font-size-x-small: 0.875rem;
