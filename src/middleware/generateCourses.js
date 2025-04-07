@@ -1,8 +1,8 @@
 const moment = require("moment");
-const classDAO = require("../DAOs/ClassDAO.js");
-const courseDAO = require("../DAOs/CourseDAO.js");
-const DanceClass = require("../models/ClassModel.js");
-const Course = require("../models/CourseModel.js");
+const classDAO = require("../DAOs/ClassDAO");
+const courseDAO = require("../DAOs/CourseDAO");
+const DanceClass = require("../models/ClassModel");
+const Course = require("../models/CourseModel");
 
 async function generateRecurringCourse(
   name,
@@ -13,9 +13,14 @@ async function generateRecurringCourse(
   classLength,
   durationWeeks,
   startDate,
-  time
+  time,
+  courseCapacity,
+  classCapacity
 ) {
   const [hour, minute] = time.split(":").map(Number);
+
+  const courseStartDate = moment(startDate);
+  const courseEndDate = moment(startDate).add(durationWeeks - 1, "weeks");
 
   const course = new Course(
     name,
@@ -24,11 +29,12 @@ async function generateRecurringCourse(
     location,
     price,
     `${durationWeeks} weeks`,
-    startDate
+    courseStartDate.toDate(),
+    courseEndDate.toDate(),
+    courseCapacity // <-- added
   );
 
   const insertedCourse = await courseDAO.insert(course);
-
   const classes = [];
 
   for (let i = 0; i < durationWeeks; i++) {
@@ -51,7 +57,8 @@ async function generateRecurringCourse(
       description,
       location,
       pricePerClass,
-      insertedCourse._id // use NeDB's _id
+      insertedCourse._id,
+      classCapacity
     );
 
     classes.push(danceClass);
@@ -73,7 +80,12 @@ async function generateWorkshopCourse(
   pricePerClass,
   classLength,
   startDate,
+  courseCapacity,
+  classCapacity
 ) {
+  const courseStartDate = moment(startDate);
+  const courseEndDate = moment(startDate).add(7, "days");
+
   const course = new Course(
     name,
     description,
@@ -81,7 +93,9 @@ async function generateWorkshopCourse(
     location,
     price,
     "Weekend Workshop",
-    startDate
+    courseStartDate.toDate(),
+    courseEndDate.toDate(),
+    courseCapacity // <-- added
   );
 
   const insertedCourse = await courseDAO.insert(course);
@@ -105,13 +119,14 @@ async function generateWorkshopCourse(
     const classEnd = moment(classStart).add(classLength, "minutes").toDate();
 
     const danceClass = new DanceClass(
-      `${course.name} Workshop Class ${index + 1}`,
+      `${name} Workshop Class ${index + 1}`,
       classStart,
       classEnd,
       description,
       location,
       pricePerClass,
-      insertedCourse._id
+      insertedCourse._id,
+      classCapacity
     );
 
     classes.push(danceClass);
@@ -124,6 +139,7 @@ async function generateWorkshopCourse(
 
   return insertedCourse;
 }
+
 
 module.exports = {
   generateRecurringCourse,

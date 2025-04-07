@@ -6,7 +6,8 @@ class DanceClass {
     description,
     location,
     price,
-    courseId
+    courseId,
+    capacity
   ) {
     this.name = name;
     this.startDateTime = startDateTime;
@@ -16,6 +17,7 @@ class DanceClass {
     this.price = price;
     this.courseId = courseId; // The course this class belongs to
     this.active = true; // Enables the organiser to cancel
+    this.capacity = capacity;
     this.attendees = []; // List of attendees for this single class (excludng the course attendees)
   }
 }

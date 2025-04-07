@@ -24,7 +24,7 @@
            tabindex="{{tabIndex}}">
         <h3>{{name}}</h3>
         <p class="description">{{description}}</p>
-        <p><strong>Course:</strong> {{courseName}}</p> <!-- Display Course Name -->
+        <p><strong>Course:</strong> {{courseName}}</p>
         <p><strong>Start:</strong> {{formattedStartDateTime}}</p>
         <p><strong>End:</strong> {{formattedEndDateTime}}</p>
         <p><strong>Location:</strong> {{location}}</p>
@@ -48,33 +48,32 @@
   </div>
 </main>
 
-  <!-- Modal -->
-  <div id="classModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h3 id="modalClassName"></h3>
-      <p id="modalClassDescription"></p>
-      <p><strong>Location:</strong> <span id="modalClassLocation"></span></p>
-      <p><strong>Price:</strong> $<span id="modalClassPrice"></span></p>
-      <p><strong>Start Time:</strong> <span id="modalClassStartTime"></span></p>
-      <p><strong>End Time:</strong> <span id="modalClassEndTime"></span></p>
+<!-- Modal -->
+<div id="classModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h3 id="modalClassName"></h3>
+    <p id="modalClassDescription"></p>
+    <p><strong>Location:</strong> <span id="modalClassLocation"></span></p>
+    <p><strong>Price:</strong> $<span id="modalClassPrice"></span></p>
+    <p><strong>Start Time:</strong> <span id="modalClassStartTime"></span></p>
+    <p><strong>End Time:</strong> <span id="modalClassEndTime"></span></p>
 
-      <form id="registerClassForm">
-        <label for="userName">Your Name:</label>
-        <input type="text" id="userName" name="userName" required placeholder="Enter your name" />
+    <form id="registerClassForm">
+      <label for="userName">Your Name:</label>
+      <input type="text" id="userName" name="userName" required placeholder="Enter your name" />
 
-        <label for="userEmail">Your Email:</label>
-        <input type="email" id="userEmail" name="userEmail" required placeholder="Enter your email" />
+      <label for="userEmail">Your Email:</label>
+      <input type="email" id="userEmail" name="userEmail" required placeholder="Enter your email" />
 
-        <input type="hidden" id="modalClassId" name="classId" />
+      <input type="hidden" id="modalClassId" name="classId" />
 
-        <button type="submit">Register</button>
-      </form>
-    </div>
+      <button type="submit">Register</button>
+    </form>
   </div>
+</div>
 
-  {{> footer}}
-
-  <script src="/js/classes.js"></script>
+{{> footer}}
+<script src="/js/classes.js"></script>
 </body>
 </html>

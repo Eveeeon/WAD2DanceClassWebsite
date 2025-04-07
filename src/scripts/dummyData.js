@@ -24,6 +24,8 @@ const recurringCourses = [
     durationWeeks: 12,
     startDate: "2025-04-28",
     time: "18:30",
+    courseCapacity: 25,
+    classCapacity: 35,
   },
   {
     name: "Intermediate Tango",
@@ -35,6 +37,8 @@ const recurringCourses = [
     durationWeeks: 10,
     startDate: "2025-04-29",
     time: "19:00",
+    courseCapacity: 15,
+    classCapacity: 20,
   },
   {
     name: "Advanced Hip-Hop",
@@ -46,6 +50,8 @@ const recurringCourses = [
     durationWeeks: 8,
     startDate: "2025-04-30",
     time: "17:45",
+    courseCapacity: 10,
+    classCapacity: 15,
   },
   {
     name: "Latin Fusion",
@@ -57,6 +63,8 @@ const recurringCourses = [
     durationWeeks: 12,
     startDate: "2025-05-01",
     time: "18:00",
+    courseCapacity: 15,
+    classCapacity: 20,
   },
   {
     name: "Swing Dance",
@@ -68,6 +76,8 @@ const recurringCourses = [
     durationWeeks: 10,
     startDate: "2025-05-02",
     time: "19:15",
+    courseCapacity: 10,
+    classCapacity: 20,
   },
 ];
 
@@ -90,7 +100,9 @@ const seed = async () => {
         course.classLength,
         course.durationWeeks,
         course.startDate,
-        course.time
+        course.time,
+        course.courseCapacity,
+        course.classCapacity  
       );
     }
 
@@ -99,6 +111,8 @@ const seed = async () => {
     const fullPrice = 100;
     const classPrice = 20;
     const length = 90;
+    const courseCapacity = 0;
+    const classCapacity = 50;
     await generateWorkshopCourse(
       "Freestyle Dance",
       "A weekend of expressive freestyle dance.",
@@ -106,7 +120,9 @@ const seed = async () => {
       fullPrice,
       classPrice,
       length,
-      workshopStartDate
+      workshopStartDate,
+      courseCapacity,
+      classCapacity  
     );
 
     console.log("Dummy data has been added to the database.");

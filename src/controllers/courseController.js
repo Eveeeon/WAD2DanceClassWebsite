@@ -6,11 +6,18 @@ const getCourses = async (req, res) => {
   try {
     const courses = await courseDAO.findAll();
 
-    const formattedCourses = courses.map((course, index) => ({
-      ...course,
-      formattedStartDate: moment(course.startDate).format("dddd, MMMM Do YYYY"),
-      tabIndex: index + 1,
-    }));
+    const formattedCourses = courses.map((course, index) => {
+      const currentAttendees = Array.isArray(course.attendees) ? course.attendees.length : 0;
+      const courseCapacity = typeof course.capacity === "number" ? course.capacity : Infinity;
+      const isFull = currentAttendees >= courseCapacity;
+
+      return {
+        ...course,
+        formattedStartDate: moment(course.startDate).format("dddd, MMMM Do YYYY"),
+        tabIndex: index + 1,
+        fullyBooked: isFull,
+      };
+    });
 
     res.render("courses", {
       title: "Dance Courses",
@@ -35,6 +42,17 @@ const registerForCourse = async (req, res) => {
     const course = await courseDAO.findById(courseId);
     if (!course) {
       return res.status(404).json({ message: "Course not found." });
+    }
+
+    // Ensure attendees array exists
+    course.attendees = Array.isArray(course.attendees) ? course.attendees : [];
+
+    // Check if course is fully booked
+    const currentAttendees = course.attendees.length;
+    const courseCapacity = course.capacity;
+
+    if (currentAttendees >= courseCapacity) {
+      return res.status(400).json({ message: "Sorry, this course is fully booked." });
     }
 
     const newAttendee = { name: userName, email: userEmail };

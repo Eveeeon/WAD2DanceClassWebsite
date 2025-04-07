@@ -14,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
     registerBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+  
         modalName.textContent = btn.dataset.courseName;
         modalDesc.textContent = btn.dataset.courseDescription;
         modalLocation.textContent = btn.dataset.courseLocation;

@@ -2,37 +2,37 @@ const classDAO = require("../DAOs/ClassDAO");
 const courseDAO = require("../DAOs/CourseDAO");
 const moment = require("moment");
 
-// Fetch all classes and map ids to course names
+// Fetch all classes and map course IDs to names
 const getClasses = async (req, res) => {
   try {
     const classes = await classDAO.findAll();
     const courses = await courseDAO.findAll();
-    
-    // Map courseId to course name
+
     const courseMap = courses.reduce((map, course) => {
       map[course._id] = course.name;
       return map;
     }, {});
 
-    // Formating dates
     const formattedClasses = classes.map((cls, index) => {
+      const currentAttendees = Array.isArray(cls.attendees) ? cls.attendees.length : 0;
+      const classCapacity = cls.capacity;
+      const isFull = currentAttendees >= classCapacity;
 
       return {
         ...cls,
-        courseName: courseMap[cls.courseId] || 'Not Part of a Course', 
+        courseName: courseMap[cls.courseId] || "Not Part of a Course",
         formattedStartDateTime: moment(cls.startDateTime).format("MMMM Do, YYYY, h:mm A"),
         formattedEndDateTime: moment(cls.endDateTime).format("MMMM Do, YYYY, h:mm A"),
         tabIndex: index + 1,
+        fullyBooked: isFull,
       };
     });
 
-    // Get filter values
     const uniqueCourses = [...new Set(formattedClasses.map(cls => cls.courseName))];
-    console.log("Unique Courses:", uniqueCourses); // Log the unique courses array
 
     res.render("classes", {
       title: "Dance Classes",
-      uniqueCourses: uniqueCourses,
+      uniqueCourses,
       classes: formattedClasses,
       isSignedIn: false,
     });
@@ -41,7 +41,6 @@ const getClasses = async (req, res) => {
     res.status(500).send("Something went wrong.");
   }
 };
-
 
 // Register for a class
 const registerForClass = async (req, res) => {
@@ -55,8 +54,16 @@ const registerForClass = async (req, res) => {
     const cls = await classDAO.findById(classId);
     if (!cls) return res.status(404).json({ message: "Class not found." });
 
+    cls.attendees = Array.isArray(cls.attendees) ? cls.attendees : [];
+
+    const currentAttendees = cls.attendees.length;
+    const classCapacity = typeof cls.capacity === "number" ? cls.capacity : Infinity;
+
+    if (currentAttendees >= classCapacity) {
+      return res.status(400).json({ message: "Sorry, this class is fully booked." });
+    }
+
     const newAttendee = { name: userName, email: userEmail };
-    cls.attendees = cls.attendees || [];
     cls.attendees.push(newAttendee);
 
     await classDAO.db.update(

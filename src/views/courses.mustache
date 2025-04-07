@@ -6,24 +6,29 @@
   {{> navBar}}
 
 <main class="page course-page">
-
-  <div class="grid"> <!-- was course-grid -->
+  <div class="grid">
     {{#courses}}
       <div class="card" tabindex="{{tabIndex}}">
         <h3>{{name}}</h3>
         <p class="description">{{description}}</p>
         <p class="start-date"><strong>Start Date:</strong> {{formattedStartDate}}</p>
-<button class="register-btn" 
-        data-course-id="{{_id}}" 
-        data-course-name="{{name}}" 
-        data-course-description="{{description}}" 
-        data-course-location="{{location}}" 
-        data-course-price="{{price}}" 
-        data-course-duration="{{duration}}" 
-        data-course-date="{{formattedStartDate}}">
-  Register
-</button>
 
+        {{#fullyBooked}}
+          <button class="register-btn" disabled>Not Available</button>
+        {{/fullyBooked}}
+
+        {{^fullyBooked}}
+          <button class="register-btn" 
+                  data-course-id="{{_id}}" 
+                  data-course-name="{{name}}" 
+                  data-course-description="{{description}}" 
+                  data-course-location="{{location}}" 
+                  data-course-price="{{price}}" 
+                  data-course-duration="{{duration}}" 
+                  data-course-date="{{formattedStartDate}}">
+            Register
+          </button>
+        {{/fullyBooked}}
       </div>
     {{/courses}}
 
@@ -33,7 +38,7 @@
   </div>
 </main>
 
-
+<!-- Modal -->
 <div id="courseModal" class="modal">
   <div class="modal-content">
     <span class="close-btn">&times;</span>
@@ -59,8 +64,7 @@
   </div>
 </div>
 
-  {{> footer}}
-
-  <script src="/js/courses.js"></script>
+{{> footer}}
+<script src="/js/courses.js"></script>
 </body>
 </html>
