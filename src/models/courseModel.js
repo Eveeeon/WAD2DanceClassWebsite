@@ -1,5 +1,5 @@
 class Course {
-  constructor(name, description, type, location, price, duration, startDate) {
+  constructor(name, description, type, location, price, duration, startDate, capacity) {
     this.name = name;
     this.description = description;
     this.type = type; // Recurring or Workshop or Custom

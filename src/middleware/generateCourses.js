@@ -72,7 +72,7 @@ async function generateWorkshopCourse(
   price,
   pricePerClass,
   classLength,
-  startDate
+  startDate,
 ) {
   const course = new Course(
     name,
