@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+  {{> header}}
+</head>
+<body>
+  {{> navBar}}
+
+  <main class="course-page">
+    <h2>Upcoming Dance Courses</h2>
+
+    <div class="course-grid">
+      {{#courses}}
+        <div class="course-card" tabindex="{{@index + 1}}">
+          <h3>{{name}}</h3>
+          <p class="description">{{description}}</p>
+          <p class="start-date"><strong>Start Date:</strong> {{startDate}}</p>
+          <button>View Classes</button>
+        </div>
+      {{/courses}}
+
+      {{^courses}}
+        <p class="no-courses">No courses available at the moment.</p>
+      {{/courses}}
+    </div>
+  </main>
+
+  {{> footer}}
+</body>
+</html>
