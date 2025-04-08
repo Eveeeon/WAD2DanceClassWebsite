@@ -51,12 +51,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = {
       classId: modalClassId.value,
-      userName: document.getElementById("userName").value,
-      userEmail: document.getElementById("userEmail").value,
+      name: document.getElementById("name").value,
+      email: document.getElementById("email").value,
     };
 
     try {
-      const res = await fetch("/register-for-class", {
+      const res = await fetch("classes/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

@@ -1,6 +1,8 @@
 const classDAO = require("../DAOs/ClassDAO");
 const courseDAO = require("../DAOs/CourseDAO");
 const moment = require("moment");
+const validator = require("validator");
+const { sendClassRegistrationEmail } = require("../middleware/emailHandler");
 
 // Fetch all classes and map course IDs to names, can take a month as a query parameter
 // Default to the current month if not provided
@@ -9,15 +11,18 @@ const getClasses = async (req, res) => {
     const monthParam = req.query.month || moment().format("YYYY-MM");  // "YYYY-MM" format
     const startOfMonth = moment(monthParam, "YYYY-MM").startOf("month");
     const endOfMonth = moment(monthParam, "YYYY-MM").endOf("month");
-    const classes = await classDAO.findByStartDateRange(startOfMonth.toDate(), endOfMonth.toDate());
 
+    // Fetch classes within the specified date range
+    const classes = await classDAO.findByStartDateRange(startOfMonth.toDate(), endOfMonth.toDate());
     const courses = await courseDAO.findAll();
 
+    // Map course IDs to course names
     const courseMap = courses.reduce((map, course) => {
       map[course._id] = course.name;
       return map;
     }, {});
 
+    // Format classes with course names and date-times
     const formattedClasses = classes.map((cls, index) => ({
       ...cls,
       courseName: courseMap[cls.courseId] || "Not Part of a Course",
@@ -26,6 +31,7 @@ const getClasses = async (req, res) => {
       tabIndex: index + 1,
     }));
 
+    // Get unique course names
     const uniqueCourses = [...new Set(formattedClasses.map(cls => cls.courseName))];
 
     // Render the page with the filtered classes for the selected month
@@ -47,41 +53,46 @@ const changeMonth = (req, res) => {
   const currentMonth = req.query.month || moment().format("YYYY-MM");
   const direction = req.params.direction;
 
+  // Calculate the new month based on the direction
   const newMonth = moment(currentMonth, "YYYY-MM").add(direction === "next" ? 1 : -1, "months").format("YYYY-MM");
-  
+
   // Redirect to the updated month
   res.redirect(`/classes?month=${newMonth}`);
 };
 
-
 // Register for a class
 const registerForClass = async (req, res) => {
-  const { classId, userName, userEmail } = req.body;
+  const { classId, name, email } = req.body;
 
-  if (!userName || !userEmail) {
-    return res.status(400).json({ message: "Name and email are required." });
+  // Validate input
+  if (
+    !name ||
+    !validator.isLength(name.trim(), { min: 2, max: 100 }) ||
+    !email ||
+    !validator.isEmail(email)
+  ) {
+    return res.status(400).json({ message: "Please provide valid name and email." });
   }
 
   try {
-    const cls = await classDAO.findById(classId);
-    if (!cls) return res.status(404).json({ message: "Class not found." });
+    // Fetch the class by ID
+    const clss = await classDAO.findById(classId);
+    if (!clss) return res.status(404).json({ message: "Class not found." });
 
-    cls.attendees = Array.isArray(cls.attendees) ? cls.attendees : [];
-
-    const currentAttendees = cls.attendees.length;
-    const classCapacity = typeof cls.capacity === "number" ? cls.capacity : Infinity;
-
-    if (currentAttendees >= classCapacity) {
+    // Check if fully booked
+    if (clss.attendees.length >= clss.capacity ) {
       return res.status(400).json({ message: "Sorry, this class is fully booked." });
     }
 
-    const newAttendee = { name: userName, email: userEmail };
-    cls.attendees.push(newAttendee);
+    // Add attendee
+    const newAttendee = { name: name.trim(), email: email.toLowerCase().trim() };
+    await classDAO.addAttendee(classId , newAttendee);
 
-    await classDAO.db.update(
-      { _id: classId },
-      { $set: { attendees: cls.attendees } },
-      {}
+    // Send confirmation email with cancellation link
+    await sendClassRegistrationEmail(
+      newAttendee,
+      clss,
+      `${process.env.BASE_URL}/cancelClass`
     );
 
     res.status(200).json({ message: "Successfully registered!" });

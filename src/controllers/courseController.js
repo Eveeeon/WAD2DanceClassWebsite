@@ -1,5 +1,8 @@
 const courseDAO = require("../DAOs/CourseDAO.js");
 const moment = require("moment");
+const validator = require("validator");
+const { sendCourseRegistrationEmail } = require("../middleware/emailHandler");
+require("dotenv").config();
 
 // Fetch all courses
 const getCourses = async (req, res) => {
@@ -7,13 +10,19 @@ const getCourses = async (req, res) => {
     const courses = await courseDAO.findAll();
 
     const formattedCourses = courses.map((course, index) => {
-      const currentAttendees = Array.isArray(course.attendees) ? course.attendees.length : 0;
-      const courseCapacity = typeof course.capacity === "number" ? course.capacity : Infinity;
+      const currentAttendees = Array.isArray(course.attendees)
+        ? course.attendees.length
+        : 0;
+      const courseCapacity =
+        typeof course.capacity === "number" ? course.capacity : Infinity;
       const isFull = currentAttendees >= courseCapacity;
 
       return {
         ...course,
-        formattedStartDate: moment(course.startDate).format("dddd, MMMM Do YYYY"),
+        formattedStartDate: moment(course.startDate).format(
+          "dddd, MMMM Do YYYY"
+        ),
+        formattedEndDate: moment(course.endDate).format("dddd, MMMM Do YYYY"),
         tabIndex: index + 1,
         fullyBooked: isFull,
       };
@@ -32,10 +41,17 @@ const getCourses = async (req, res) => {
 
 // Register for a course
 const registerForCourse = async (req, res) => {
-  const { courseId, userName, userEmail } = req.body;
+  const { courseId, name, email } = req.body;
 
-  if (!userName || !userEmail) {
-    return res.status(400).json({ message: "Name and email are required." });
+  // Validation
+  if (
+    !name ||
+    !email ||
+    !validator.isLength(name, { min: 1, max: 100 }) ||
+    !validator.isAlpha(name.replace(/\s/g, "")) || // Ensure name is only alphabets and spaces
+    !validator.isEmail(email)
+  ) {
+    return res.status(400).json({ message: "Invalid email or name format." });
   }
 
   try {
@@ -44,24 +60,21 @@ const registerForCourse = async (req, res) => {
       return res.status(404).json({ message: "Course not found." });
     }
 
-    // Ensure attendees array exists
-    course.attendees = Array.isArray(course.attendees) ? course.attendees : [];
-
-    // Check if course is fully booked
     const currentAttendees = course.attendees.length;
     const courseCapacity = course.capacity;
 
     if (currentAttendees >= courseCapacity) {
-      return res.status(400).json({ message: "Sorry, this course is fully booked." });
+      return res.status(400).json({ message: "Course is fully booked." });
     }
 
-    const newAttendee = { name: userName, email: userEmail };
-    course.attendees.push(newAttendee);
-
-    await courseDAO.db.update(
-      { _id: courseId },
-      { $set: { attendees: course.attendees } },
-      {}
+    // Add new attendee
+    const newAttendee = { name: name.trim(), email: email.trim() };
+    await courseDAO.addAttendee(courseId, newAttendee);
+    // Send confirmation email
+    await sendCourseRegistrationEmail(
+      newAttendee,
+      course,
+      `${process.env.BASE_URL}/cancelCourse`
     );
 
     return res.status(200).json({ message: "Successfully registered!" });

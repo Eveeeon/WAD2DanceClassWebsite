@@ -1,4 +1,5 @@
 const Datastore = require("gray-nedb");
+const logger = require("pino")();
 
 class ClassDAO {
   constructor() {
@@ -6,38 +7,65 @@ class ClassDAO {
   }
 
   async insert(classes) {
-    if (Array.isArray(classes)) {
-      return new Promise((resolve, reject) => {
-        this.db.insert(classes, (err, newDocs) => {
-          if (err) reject(err);
-          this.db.persistence.compactDatafile();
-          resolve(newDocs);
-        });
+    return new Promise((resolve, reject) => {
+      this.db.insert(classes, (err, result) => {
+        if (err) {
+          logger.error(
+            { err, op: "insert", data: classes },
+            "Failed to insert class/classes"
+          );
+          return reject(err);
+        }
+        logger.info({ op: "insert", data: result }, "Inserted class(es)");
+        this.db.persistence.compactDatafile();
+        resolve(result);
       });
-    } else {
-      return new Promise((resolve, reject) => {
-        this.db.insert(classes, (err, newDoc) => {
-          if (err) reject(err);
-          this.db.persistence.compactDatafile();
-          resolve(newDoc);
-        });
-      });
-    }
+    });
   }
 
   async findAll() {
     return new Promise((resolve, reject) => {
       this.db.find({}, (err, docs) => {
-        if (err) reject(err);
+        if (err) {
+          logger.error({ err, op: "findAll" }, "Failed to read all classes");
+          return reject(err);
+        }
+        logger.info(
+          { op: "findAll", count: docs.length },
+          "Read all classes"
+        );
         resolve(docs);
       });
     });
-  }  
+  }
+
+  async findActive() {
+    return new Promise((resolve, reject) => {
+      this.db.find({ active: { $ne: false } }, (err, docs) => {
+        if (err) {
+          logger.error(
+            { err, op: "findActive" },
+            "Failed to read active classes"
+          );
+          return reject(err);
+        }
+        logger.info(
+          { op: "findActive", count: docs.length },
+          "Read active classes"
+        );
+        resolve(docs);
+      });
+    });
+  }
 
   async findById(id) {
     return new Promise((resolve, reject) => {
       this.db.findOne({ _id: id }, (err, doc) => {
-        if (err) reject(err);
+        if (err) {
+          logger.error({ err, op: "findById", id }, "Failed to find class");
+          return reject(err);
+        }
+        logger.info({ op: "findById", id }, "Found class");
         resolve(doc);
       });
     });
@@ -46,7 +74,17 @@ class ClassDAO {
   async findByCourseId(courseId) {
     return new Promise((resolve, reject) => {
       this.db.find({ courseId }, (err, docs) => {
-        if (err) reject(err);
+        if (err) {
+          logger.error(
+            { err, op: "findByCourseId", courseId },
+            "Failed to find by courseId"
+          );
+          return reject(err);
+        }
+        logger.info(
+          { op: "findByCourseId", courseId, count: docs.length },
+          "Found classes by course"
+        );
         resolve(docs);
       });
     });
@@ -54,21 +92,103 @@ class ClassDAO {
 
   async findByStartDateRange(startDate, endDate) {
     return new Promise((resolve, reject) => {
-      this.db.find({
-        startDateTime: { $gte: startDate, $lte: endDate }
-      }, (err, docs) => {
-        if (err) reject(err);
-        resolve(docs);
-      });
+      this.db.find(
+        { startDateTime: { $gte: startDate, $lte: endDate } },
+        (err, docs) => {
+          if (err) {
+            logger.error(
+              { err, op: "findByStartDateRange", startDate, endDate },
+              "Failed to find by range"
+            );
+            return reject(err);
+          }
+          logger.info(
+            { op: "findByStartDateRange", count: docs.length },
+            "Loaded by date range"
+          );
+          resolve(docs);
+        }
+      );
     });
   }
 
-  async removeById(id) {
+  async addAttendee(id, attendee) {
     return new Promise((resolve, reject) => {
-      this.db.remove({ _id: id }, {}, (err, numRemoved) => {
-        if (err) reject(err);
-        this.db.persistence.compactDatafile();
-        resolve(numRemoved);
+      this.findById(id)
+        .then(classDoc => {
+          // Check if already registered
+          const existingAttendee = classDoc.attendees.find(
+            (existing) => existing.email === attendee.email
+          );
+          if (existingAttendee) {
+            logger.warn(
+              { op: "addAttendee", id, attendeeEmail: attendee.email },
+              "Already registered attendee"
+            );
+            return reject("Already registered");
+          }
+  
+          this.db.update(
+            { _id: id },
+            { $push: { attendees: attendee } },
+            {},
+            (err) => {
+              if (err) {
+                logger.error(
+                  { err, op: "addAttendee", id, attendee },
+                  "Failed to add attendee"
+                );
+                return reject(err);
+              }
+              logger.info({ op: "addAttendee", id, attendee }, "Added attendee");
+              resolve(true);
+            }
+          );
+        })
+        .catch(err => {
+          logger.error({ err, op: "addAttendee", id, attendee }, "Failed to add attendee");
+          reject(err);
+        });
+    });
+  }
+
+  async removeAttendee(id, email) {
+    return new Promise((resolve, reject) => {
+      this.db.update(
+        { _id: id },
+        { $pull: { attendees: { email } } },
+        {},
+        (err, numAffected) => {
+          if (err) {
+            logger.error(
+              { err, op: "removeAttendee", id, email },
+              "Failed to remove attendee"
+            );
+            return reject(err);
+          }
+  
+          if (numAffected > 0) {
+            logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
+            resolve("Success");
+          } else {
+            logger.warn({ op: "removeAttendee", id, email }, "No attendee found to remove");
+            resolve("Not Found");
+          }
+        }
+      );
+    });
+  }
+
+  // Moves classes to inactive
+  async cancel(id) {
+    return new Promise((resolve, reject) => {
+      this.db.update({ _id: id }, { $set: { active: false } }, {}, (err) => {
+        if (err) {
+          logger.error({ err, op: "cancel", id }, "Failed to cancel class");
+          return reject(err);
+        }
+        logger.info({ op: "cancel", id }, "Cancelled class");
+        resolve(true);
       });
     });
   }

@@ -43,8 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
       const formData = {
         courseId: modalCourseId.value,
-        userName: document.getElementById("userName").value,
-        userEmail: document.getElementById("userEmail").value,
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
       };
   
       try {

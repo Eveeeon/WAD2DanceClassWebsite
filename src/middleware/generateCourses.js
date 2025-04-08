@@ -4,7 +4,7 @@ const courseDAO = require("../DAOs/CourseDAO");
 const DanceClass = require("../models/ClassModel");
 const Course = require("../models/CourseModel");
 
-async function generateRecurringCourse(
+const generateRecurringCourse = async (
   name,
   description,
   location,
@@ -16,7 +16,7 @@ async function generateRecurringCourse(
   time,
   courseCapacity,
   classCapacity
-) {
+) => {
   const [hour, minute] = time.split(":").map(Number);
 
   const courseStartDate = moment(startDate);
@@ -70,9 +70,9 @@ async function generateRecurringCourse(
   await courseDAO.updateClassIds(insertedCourse._id, classIds);
 
   return insertedCourse;
-}
+};
 
-async function generateWorkshopCourse(
+const generateWorkshopCourse = async (
   name,
   description,
   location,
@@ -82,7 +82,7 @@ async function generateWorkshopCourse(
   startDate,
   courseCapacity,
   classCapacity
-) {
+) => {
   const courseStartDate = moment(startDate);
   const courseEndDate = moment(startDate).add(7, "days");
 
@@ -95,7 +95,7 @@ async function generateWorkshopCourse(
     "Weekend Workshop",
     courseStartDate.toDate(),
     courseEndDate.toDate(),
-    courseCapacity // <-- added
+    courseCapacity
   );
 
   const insertedCourse = await courseDAO.insert(course);
@@ -138,8 +138,7 @@ async function generateWorkshopCourse(
   await courseDAO.updateClassIds(insertedCourse._id, classIds);
 
   return insertedCourse;
-}
-
+};
 
 module.exports = {
   generateRecurringCourse,
