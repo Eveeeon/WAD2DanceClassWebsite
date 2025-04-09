@@ -7,7 +7,7 @@ require("dotenv").config();
 // Fetch all courses
 const getCourses = async (req, res) => {
   try {
-    const courses = await courseDAO.findAll();
+    const courses = await courseDAO.findActive();
 
     const formattedCourses = courses.map((course, index) => {
       const currentAttendees = Array.isArray(course.attendees)
@@ -48,7 +48,7 @@ const registerForCourse = async (req, res) => {
     !name ||
     !email ||
     !validator.isLength(name, { min: 1, max: 100 }) ||
-    !validator.isAlpha(name.replace(/\s/g, "")) || // Ensure name is only alphabets and spaces
+    !validator.isAlpha(name.replace(/\s/g, "")) ||
     !validator.isEmail(email)
   ) {
     return res.status(400).json({ message: "Invalid email or name format." });

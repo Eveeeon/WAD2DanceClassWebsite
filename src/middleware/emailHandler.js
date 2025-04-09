@@ -56,7 +56,7 @@ const generateEmailBody = (
           ? `<li><strong>Location:</strong> ${item.location}</li>`
           : ""
       }
-      ${item.price ? `<li><strong>Price:</strong> ${item.price}</li>` : ""}
+      ${item.price ? `<li><strong>Price:</strong> £${item.price}</li>` : ""}
     </ul>
   `;
 

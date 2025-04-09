@@ -77,6 +77,8 @@ main {
   border-radius: 0.375rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   outline: none;
+  display: flex;
+  flex-direction: column;
 }
 .page .card h3 {
   font-size: 1.25rem;
@@ -95,6 +97,7 @@ main {
   border-radius: 0.375rem;
   cursor: pointer;
   transition: background 0.3s;
+  margin-top: auto;
 }
 .page .card button:hover {
   background: rgb(23.1696428571, 109.6696428571, 149.8303571429);
@@ -285,7 +288,7 @@ html {
   display: flex;
   flex-direction: column;
   gap: 3rem;
-  width: 100%;
+  width: 80%;
 }
 
 .about-intro {
@@ -345,14 +348,6 @@ html {
   width: 100%;
   box-sizing: border-box;
 }
-@media (max-width: 480px) {
-  .about-locations h3 {
-    font-size: 1.5rem;
-  }
-  .about-locations .location-item {
-    padding: 1rem;
-  }
-}
 
 .about-faq {
   width: 100%;
@@ -377,6 +372,9 @@ html {
   overflow: hidden;
 }
 .about-faq .faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   text-align: left;
   padding: 1.2rem;
@@ -386,36 +384,41 @@ html {
   font-size: 1.1rem;
   border: none;
   box-sizing: border-box;
+  gap: 1rem;
+}
+.about-faq .faq-question .text {
+  flex-grow: 1;
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
+.about-faq .faq-question .arrow {
+  font-size: 0.8rem;
+  color: #cccccc;
+  transition: transform 0.4s ease;
+}
+.about-faq .faq-question.expanded .arrow {
+  transform: rotate(180deg);
+}
 .about-faq .faq-answer {
-  padding: 1rem 1.2rem;
+  display: block;
+  height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  padding: 0 1.2rem;
   background-color: #fff;
   border-top: 1px solid #eee;
   font-size: 1rem;
   line-height: 1.6;
   box-sizing: border-box;
-  width: 100%;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+  opacity: 0;
 }
-.about-faq .faq-answer.hidden {
-  display: none;
+.about-faq .faq-answer.expanded {
+  height: auto;
+  padding: 1.2rem;
+  opacity: 1;
 }
 .about-faq .faq-item:hover {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-@media (max-width: 480px) {
-  .about-faq h3 {
-    font-size: 1.5rem;
-  }
-  .about-faq .faq-question {
-    font-size: 1rem;
-  }
-  .about-faq .faq-item {
-    padding: 1rem;
-  }
 }
 
 /*# sourceMappingURL=main.css.map */

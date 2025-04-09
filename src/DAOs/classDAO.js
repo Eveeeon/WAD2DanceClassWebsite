@@ -93,7 +93,7 @@ class ClassDAO {
   async findByStartDateRange(startDate, endDate) {
     return new Promise((resolve, reject) => {
       this.db.find(
-        { startDateTime: { $gte: startDate, $lte: endDate } },
+        { startDateTime: { $gte: startDate, $lte: endDate }, active: { $ne: false } },
         (err, docs) => {
           if (err) {
             logger.error(

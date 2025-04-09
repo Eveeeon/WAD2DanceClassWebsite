@@ -31,7 +31,10 @@
       <div class="faq">
         {{#faqs}}
         <div class="faq-item">
-          <button class="faq-question">{{question}}</button>
+          <button class="faq-question">
+            <span class="text">{{question}}</span>
+            <span class="arrow">&#9660;</span>
+          </button>
           <div class="faq-answer hidden">{{answer}}</div>
         </div>
         {{/faqs}}

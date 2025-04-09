@@ -49,6 +49,11 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    // Prevent multiple submissions
+    const submitBtn = form.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Registering...";
+
     const formData = {
       classId: modalClassId.value,
       name: document.getElementById("name").value,
@@ -72,6 +77,10 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error(err);
       alert("Something went wrong.");
+    } finally {
+      // Re-enable the button
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Register";
     }
   });
 
