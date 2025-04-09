@@ -22,7 +22,9 @@ const recurringCourses = [
     classCost: 20,
     classLength: 60,
     durationWeeks: 12,
-    startDate: "2025-04-28",
+    startDateYear: "2025",
+    startDateMonth: "04",
+    startDateDay: "28",
     time: "18:30",
     courseCapacity: 25,
     classCapacity: 35,
@@ -35,7 +37,9 @@ const recurringCourses = [
     classCost: 28,
     classLength: 90,
     durationWeeks: 10,
-    startDate: "2025-04-29",
+    startDateYear: "2025",
+    startDateMonth: "04",
+    startDateDay: "29",
     time: "19:00",
     courseCapacity: 15,
     classCapacity: 20,
@@ -48,7 +52,9 @@ const recurringCourses = [
     classCost: 30,
     classLength: 40,
     durationWeeks: 8,
-    startDate: "2025-04-30",
+    startDateYear: "2025",
+    startDateMonth: "04",
+    startDateDay: "30",
     time: "17:45",
     courseCapacity: 10,
     classCapacity: 15,
@@ -61,7 +67,9 @@ const recurringCourses = [
     classCost: 15,
     classLength: 70,
     durationWeeks: 12,
-    startDate: "2025-05-01",
+    startDateYear: "2025",
+    startDateMonth: "05",
+    startDateDay: "01",
     time: "18:00",
     courseCapacity: 15,
     classCapacity: 20,
@@ -74,7 +82,9 @@ const recurringCourses = [
     classCost: 20,
     classLength: 50,
     durationWeeks: 10,
-    startDate: "2025-05-02",
+    startDateYear: "2025",
+    startDateMonth: "05",
+    startDateDay: "02",
     time: "19:15",
     courseCapacity: 10,
     classCapacity: 20,
@@ -99,7 +109,9 @@ const seed = async () => {
         course.classCost,
         course.classLength,
         course.durationWeeks,
-        course.startDate,
+        course.startDateYear,
+        course.startDateMonth,
+        course.startDateDay,
         course.time,
         course.courseCapacity,
         course.classCapacity  
@@ -107,7 +119,9 @@ const seed = async () => {
     }
 
     // Add the workshop
-    const workshopStartDate = "2025-05-10";
+    const workshopStartDateYear = "2025";
+    const workshopStartDateMonth = "05";
+    const workshopStartDateDay = "10";
     const fullPrice = 100;
     const classPrice = 20;
     const length = 90;
@@ -120,7 +134,9 @@ const seed = async () => {
       fullPrice,
       classPrice,
       length,
-      workshopStartDate,
+      workshopStartDateYear,
+      workshopStartDateMonth,
+      workshopStartDateDay,
       courseCapacity,
       classCapacity  
     );

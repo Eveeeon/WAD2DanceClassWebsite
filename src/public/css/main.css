@@ -240,6 +240,20 @@ main {
   gap: 1.5rem;
   align-items: center;
 }
+@media screen and (max-width: 768px) {
+  .navbar .navbar-links {
+    display: none;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    background-color: #1e8ec2;
+    padding: 1rem 0;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    z-index: 10;
+  }
+}
 .navbar .navbar-link {
   font-size: 1.125rem;
   color: #ffffff;
@@ -259,6 +273,29 @@ main {
 }
 .navbar .navbar-signed-in {
   display: block;
+}
+.navbar .hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 25px;
+  height: 20px;
+  cursor: pointer;
+}
+.navbar .hamburger-menu span {
+  width: 25px;
+  height: 4px;
+  background-color: #ffffff;
+  border-radius: 2px;
+}
+@media screen and (max-width: 768px) {
+  .navbar .hamburger-menu {
+    display: flex;
+  }
+}
+.navbar .navbar-links.active {
+  display: flex;
 }
 
 .site-footer {

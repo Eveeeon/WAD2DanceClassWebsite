@@ -12,15 +12,17 @@ const generateRecurringCourse = async (
   pricePerClass,
   classLength,
   durationWeeks,
-  startDate,
+  startYear,
+  startMonth,
+  startDay,
   time,
   courseCapacity,
   classCapacity
 ) => {
   const [hour, minute] = time.split(":").map(Number);
 
-  const courseStartDate = moment(startDate);
-  const courseEndDate = moment(startDate).add(durationWeeks - 1, "weeks");
+  const courseStartDate = moment(`${startYear}-${startMonth}-${startDay}`, "YYYY-MM-DD").startOf("day");
+  const courseEndDate = moment(courseStartDate).add(durationWeeks - 1, "weeks");
 
   const course = new Course(
     name,
@@ -31,14 +33,14 @@ const generateRecurringCourse = async (
     `${durationWeeks} weeks`,
     courseStartDate.toDate(),
     courseEndDate.toDate(),
-    courseCapacity // <-- added
+    courseCapacity
   );
 
   const insertedCourse = await courseDAO.insert(course);
   const classes = [];
 
   for (let i = 0; i < durationWeeks; i++) {
-    const classStartDateTime = moment(startDate)
+    const classStartDateTime = moment(courseStartDate)
       .add(i, "weeks")
       .hour(hour)
       .minute(minute)
@@ -79,12 +81,14 @@ const generateWorkshopCourse = async (
   price,
   pricePerClass,
   classLength,
-  startDate,
+  startYear,
+  startMonth,
+  startDay,
   courseCapacity,
   classCapacity
 ) => {
-  const courseStartDate = moment(startDate);
-  const courseEndDate = moment(startDate).add(7, "days");
+  const courseStartDate = moment(`${startYear}-${startMonth}-${startDay}`, "YYYY-MM-DD");
+  const courseEndDate = moment(courseStartDate).add(7, "days");
 
   const course = new Course(
     name,
@@ -110,7 +114,7 @@ const generateWorkshopCourse = async (
   ];
 
   sessions.forEach((session, index) => {
-    const classStart = moment(startDate)
+    const classStart = moment(courseStartDate)
       .add(session.offset, "days")
       .set("hour", parseInt(session.time.split(":")[0]))
       .set("minute", parseInt(session.time.split(":")[1]))

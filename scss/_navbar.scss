@@ -1,8 +1,9 @@
 @use "_variables" as *;
+
 $nav-link-color: #ffffff;
-$nav-hover-color: #3c729e; // A darker shade of indigo for hover state
+$nav-hover-color: #3c729e;
 $spacing: 1.5rem;
-$font-size: 1.125rem; // Text size for links
+$font-size: 1.125rem;
 
 .navbar {
   background-color: $primary-color;
@@ -27,6 +28,20 @@ $font-size: 1.125rem; // Text size for links
     display: flex;
     gap: $spacing;
     align-items: center;
+
+
+    @media screen and (max-width: 768px) {
+      display: none;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      background-color: $primary-color;
+      padding: 1rem 0;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      z-index: 10;
+    }
   }
 
   .navbar-link {
@@ -35,23 +50,48 @@ $font-size: 1.125rem; // Text size for links
     text-decoration: none;
     padding: 0.5rem;
     transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $nav-hover-color;
+      border-radius: 4px;
+    }
   }
 
-  .navbar-link:hover {
-    background-color: $nav-hover-color;
-    border-radius: 4px;
-  }
-
-  // Hide these sections based on authentication status
   .navbar-auth {
     display: none;
   }
 
   .navbar-sign-in {
-    display: block; // Show for non-signed in users
+    display: block;
   }
 
   .navbar-signed-in {
-    display: block; // Show for signed-in users
+    display: block;
+  }
+
+  // Hamburger menu icon
+  .hamburger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 25px;
+    height: 20px;
+    cursor: pointer;
+
+    span {
+      width: 25px;
+      height: 4px;
+      background-color: $white-color;
+      border-radius: 2px;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: flex;
+    }
+  }
+
+  .navbar-links.active {
+    display: flex;
   }
 }
