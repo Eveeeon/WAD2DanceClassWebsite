@@ -1,0 +1,112 @@
+@use "_variables" as *;
+
+// Page Styles
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $padding-large $padding-medium;
+
+  h2 {
+    font-size: $font-size-large;
+    text-align: center;
+    margin-bottom: $padding-medium;
+    color: $text-color;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $padding-medium;
+
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (min-width: 900px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .card {
+    background: $white-color;
+    padding: $padding-medium;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+      font-size: $font-size-medium;
+      font-weight: 600;
+      margin-bottom: $padding-small;
+    }
+
+    .description {
+      color: $gray-color;
+      margin-bottom: $padding-small;
+    }
+  }
+
+  .no-items {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: $gray-color;
+  }
+  
+  
+  .filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: $padding-medium;
+
+    select {
+      padding: $padding-x-small $padding-medium;
+      font-size: $font-size-small;
+      border-radius: $border-radius;
+      border: 1px solid darken($white-color, 10%);
+      background-color: $white-color;
+      color: $text-color;
+      appearance: none;
+      cursor: pointer;
+      transition: border-color 0.3s, box-shadow 0.3s;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: $box-shadow;
+      }
+    }
+  }
+
+  .month-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: $padding-medium;
+
+    a {
+      background-color: $primary-color;
+      color: $white-color;
+      padding: $padding-x-small $padding-medium;
+      text-decoration: none;
+      border-radius: $border-radius;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+    
+    span {
+      background-color: $primary-color;
+      color: $white-color;
+      margin: $padding-medium;
+      font-size: $font-size-medium;
+      font-weight: 600;
+      padding: $padding-x-small $padding-medium;
+      border-radius: 10%;
+    }
+  }
+
+}

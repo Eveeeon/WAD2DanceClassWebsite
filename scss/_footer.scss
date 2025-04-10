@@ -1,7 +1,9 @@
+@use '_variables' as *;
+
 .site-footer {
-  background-color: #1f2937; // Tailwind's gray-800
-  color: #ffffff;
-  padding: 1.5rem 1rem;
+  background-color: $primary-color;
+  color: $white-color;
+  padding: $padding-medium $padding-small;
   text-align: center;
   margin-top: auto;
 

@@ -16,11 +16,11 @@
         <p class="price"><strong>Price:</strong> £{{price}}</p>
 
         {{#fullyBooked}}
-          <button class="register-btn" disabled>Not Available</button>
+          <button class="button-main register-btn" disabled>Not Available</button>
         {{/fullyBooked}}
 
         {{^fullyBooked}}
-          <button class="register-btn" 
+          <button class="button-main register-btn" 
                   data-course-id="{{_id}}" 
                   data-course-name="{{name}}" 
                   data-course-description="{{description}}" 
@@ -61,7 +61,7 @@
 
       <input type="hidden" id="modalCourseId" name="courseId" />
 
-      <button type="submit" id="registerCourseBtn">Register for Course</button>
+      <button class="button-main" type="submit" id="registerCourseBtn">Register for Course</button>
     </form>
   </div>
 </div>

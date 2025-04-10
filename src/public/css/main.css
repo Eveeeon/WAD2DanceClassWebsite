@@ -6,8 +6,8 @@ html, body {
 
 body {
   font-family: "Arial", sans-serif;
-  background-color: #ffffff;
-  color: #333333;
+  background-color: #ececec;
+  color: #222222;
   margin: 0;
   padding: 0;
   display: flex;
@@ -29,7 +29,7 @@ h4,
 h5,
 h6 {
   font-family: "Arial", sans-serif;
-  color: #333333;
+  color: #222222;
   margin: 0;
   padding: 0;
 }
@@ -38,7 +38,7 @@ h6 {
   width: 100%;
   margin: 0 auto;
   max-width: 1200px;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 main {
@@ -53,13 +53,13 @@ main {
 .page h2 {
   font-size: 1.75rem;
   text-align: center;
-  margin-bottom: 1.5rem;
-  color: #333333;
+  margin-bottom: 1rem;
+  color: #222222;
 }
 .page .grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 @media (min-width: 600px) {
   .page .grid {
@@ -72,7 +72,7 @@ main {
   }
 }
 .page .card {
-  background: #ffffff;
+  background: #f7f7f7;
   padding: 1rem;
   border-radius: 0.375rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -83,29 +83,16 @@ main {
 .page .card h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 .page .card .description {
-  color: #555;
-  margin-bottom: 1rem;
-}
-.page .card button {
-  background: #1e8ec2;
-  color: #ffffff;
-  border: none;
-  padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: auto;
-}
-.page .card button:hover {
-  background: rgb(23.1696428571, 109.6696428571, 149.8303571429);
+  color: #636363;
+  margin-bottom: 0.75rem;
 }
 .page .no-items {
   grid-column: 1/-1;
   text-align: center;
-  color: #999;
+  color: #636363;
 }
 .page .filters {
   display: flex;
@@ -116,111 +103,48 @@ main {
   padding: 0.5rem 1rem;
   font-size: 1rem;
   border-radius: 0.375rem;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  color: #333333;
+  border: 1px solid rgb(221.5, 221.5, 221.5);
+  background-color: #f7f7f7;
+  color: #222222;
   appearance: none;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 .page .filters select:focus {
-  border-color: #1e8ec2;
-  box-shadow: 0 0 4px rgba(30, 142, 194, 0.5);
+  border-color: #1F2041;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 .page .month-nav {
   display: flex;
-  justify-content: center; /* Center the buttons */
+  justify-content: center;
   align-items: center;
-  width: 100%; /* Ensure it takes full width of the container */
+  width: 100%;
   margin-bottom: 1rem;
 }
 .page .month-nav a {
-  background-color: #1e8ec2;
-  color: #ffffff;
+  background-color: #1F2041;
+  color: #f7f7f7;
   padding: 0.5rem 1rem;
   text-decoration: none;
   border-radius: 0.375rem;
-  transition: background 0.3s;
+  transition: background-color 0.3s;
 }
 .page .month-nav a:hover {
-  background-color: rgb(23.1696428571, 109.6696428571, 149.8303571429);
+  background-color: rgb(14.53125, 15, 30.46875);
 }
-.page .month-nav .current-month {
-  font-size: 1.2rem;
+.page .month-nav span {
+  background-color: #1F2041;
+  color: #f7f7f7;
+  margin: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  color: #333333;
-  padding: 1rem;
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 0.75rem;
-}
-.modal .modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 0.375rem;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.modal .modal-content h3 {
-  margin-bottom: 1rem;
-  font-size: 1.25rem;
-}
-.modal .modal-content p {
-  margin-bottom: 1rem;
-  color: #333333;
-}
-.modal .modal-content form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.modal .modal-content form label {
-  font-weight: 500;
-  color: #333333;
-}
-.modal .modal-content form input {
-  padding: 0.75rem;
-  border: 1px solid #ccc;
-  border-radius: 0.375rem;
-  font-size: 1rem;
-}
-.modal .modal-content form button {
-  background-color: #1e8ec2;
-  color: #ffffff;
-  border: none;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border-radius: 0.375rem;
-  cursor: pointer;
-}
-.modal .modal-content form button:hover {
-  background-color: #45a049;
-}
-.modal .modal-content .close-btn {
-  float: right;
-  font-size: 1.25rem;
-  cursor: pointer;
-  color: #aaa;
-}
-.modal .modal-content .close-btn:hover {
-  color: #333333;
+  padding: 0.5rem 1rem;
+  border-radius: 10%;
 }
 
 .navbar {
-  background-color: #1e8ec2;
-  color: #ffffff;
+  background-color: #1F2041;
+  color: #f7f7f7;
   padding: 1rem 2rem;
 }
 .navbar .navbar-container {
@@ -231,7 +155,7 @@ main {
   align-items: center;
 }
 .navbar .navbar-title {
-  color: #ffffff;
+  color: #f7f7f7;
   font-size: 1.875rem;
   font-weight: 600;
 }
@@ -246,7 +170,7 @@ main {
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    background-color: #1e8ec2;
+    background-color: #1F2041;
     padding: 1rem 0;
     position: absolute;
     top: 60px;
@@ -256,14 +180,15 @@ main {
 }
 .navbar .navbar-link {
   font-size: 1.125rem;
-  color: #ffffff;
+  color: #f7f7f7;
   text-decoration: none;
-  padding: 0.5rem;
-  transition: background-color 0.3s ease;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  outline: #f7f7f7 solid 0px;
+  transition: background 0.3s;
 }
 .navbar .navbar-link:hover {
-  background-color: #3c729e;
-  border-radius: 4px;
+  background: rgb(47.46875, 49, 99.53125);
 }
 .navbar .navbar-auth {
   display: none;
@@ -286,7 +211,7 @@ main {
 .navbar .hamburger-menu span {
   width: 25px;
   height: 4px;
-  background-color: #ffffff;
+  background-color: #f7f7f7;
   border-radius: 2px;
 }
 @media screen and (max-width: 768px) {
@@ -299,9 +224,9 @@ main {
 }
 
 .site-footer {
-  background-color: #1f2937;
-  color: #ffffff;
-  padding: 1.5rem 1rem;
+  background-color: #1F2041;
+  color: #f7f7f7;
+  padding: 1rem 0.75rem;
   text-align: center;
   margin-top: auto;
 }
@@ -335,37 +260,21 @@ html {
 .about-intro h2 {
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 .about-intro p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   line-height: 1.8;
   max-width: 700px;
   margin: 0 auto;
 }
-@media (max-width: 480px) {
-  .about-intro h2 {
-    font-size: 1.8rem;
-  }
-  .about-intro p {
-    font-size: 1rem;
-  }
-}
-@media (max-width: 768px) {
-  .about-intro h2 {
-    font-size: 2rem;
-  }
-  .about-intro p {
-    font-size: 1.1rem;
-  }
-}
 
 .about-locations {
-  margin-bottom: 4rem;
+  margin-bottom: 2rem;
   width: 100%;
 }
 .about-locations h3 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -378,10 +287,10 @@ html {
   width: 100%;
 }
 .about-locations .location-item {
-  padding: 1.2rem;
-  background-color: #fff;
-  border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  background-color: #f7f7f7;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
 }
@@ -390,20 +299,20 @@ html {
   width: 100%;
 }
 .about-faq h3 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   text-align: center;
   margin-bottom: 2rem;
 }
 .about-faq .faq {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
   width: 100%;
 }
 .about-faq .faq-item {
   border-radius: 1rem;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: #f7f7f7;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
@@ -414,11 +323,11 @@ html {
   align-items: center;
   width: 100%;
   text-align: left;
-  padding: 1.2rem;
-  background-color: #ffffff;
+  padding: 1rem;
+  background-color: #f7f7f7;
   font-weight: bold;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   border: none;
   box-sizing: border-box;
   gap: 1rem;
@@ -429,8 +338,8 @@ html {
   word-wrap: break-word;
 }
 .about-faq .faq-question .arrow {
-  font-size: 0.8rem;
-  color: #cccccc;
+  font-size: 0.875rem;
+  color: #636363;
   transition: transform 0.4s ease;
 }
 .about-faq .faq-question.expanded .arrow {
@@ -441,21 +350,93 @@ html {
   height: 0;
   overflow: hidden;
   transition: all 0.3s ease;
-  padding: 0 1.2rem;
-  background-color: #fff;
-  border-top: 1px solid #eee;
+  padding: 0 0.75rem;
+  background-color: #f7f7f7;
+  border-top: 1px solid #eaeaea;
   font-size: 1rem;
   line-height: 1.6;
   box-sizing: border-box;
   opacity: 0;
 }
+.about-faq .faq-answer button {
+  color: #222222;
+}
 .about-faq .faq-answer.expanded {
   height: auto;
-  padding: 1.2rem;
+  padding: 1rem;
   opacity: 1;
 }
 .about-faq .faq-item:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.button-main {
+  background: #1F2041;
+  color: #f7f7f7;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: auto;
+}
+.button-main:hover {
+  background: rgb(14.53125, 15, 30.46875);
+}
+
+.close-btn {
+  float: right;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #c4c4c4;
+}
+.close-btn:hover {
+  color: #222222;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 0.75rem;
+}
+.modal .modal-content {
+  background-color: #f5f5f5;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 0.375rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.modal .modal-content h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+}
+.modal .modal-content p {
+  margin-bottom: 0.75rem;
+  color: #222222;
+}
+.modal .modal-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.modal .modal-content form label {
+  font-weight: 500;
+  color: #222222;
+}
+.modal .modal-content form input {
+  padding: 0.75rem;
+  border: 1px solid rgb(221.5, 221.5, 221.5);
+  border-radius: 0.375rem;
+  font-size: 1rem;
 }
 
 /*# sourceMappingURL=main.css.map */

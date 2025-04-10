@@ -6,7 +6,7 @@ html {
 }
 
 .about {
-  padding: 2rem;
+  padding: $padding-large;
   max-width: 960px;
   margin: 0 auto;
   display: flex;
@@ -17,66 +17,46 @@ html {
 
 .about-intro {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: $section-padding;
 
   h2 {
-    font-size: 2.5rem;
+    font-size: $font-size-x-large;
     font-weight: bold;
-    margin-bottom: 1rem;
+    margin-bottom: $padding-small;
   }
 
   p {
-    font-size: 1.2rem;
+    font-size: $font-size-small;
     line-height: 1.8;
     max-width: 700px;
     margin: 0 auto;
   }
-
-  @include mobile {
-    h2 {
-      font-size: 1.8rem;
-    }
-
-    p {
-      font-size: 1rem;
-    }
-  }
-
-  @include tablet {
-    h2 {
-      font-size: 2rem;
-    }
-
-    p {
-      font-size: 1.1rem;
-    }
-  }
 }
 
 .about-locations {
-  margin-bottom: 4rem;
+  margin-bottom: $padding-large;
   width: 100%;
 
   h3 {
-    font-size: 2rem;
+    font-size: $font-size-x-large;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: $padding-large;
   }
 
   .location-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: $gap-small;
     list-style: none;
     padding: 0;
     width: 100%;
   }
 
   .location-item {
-    padding: 1.2rem;
-    background-color: #fff;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: $padding-medium;
+    background-color: $white-color;
+    border-radius: $padding-small;
+    box-shadow: $box-shadow;
     width: 100%;
     box-sizing: border-box;
   }
@@ -86,22 +66,22 @@ html {
   width: 100%;
 
   h3 {
-    font-size: 2rem;
+    font-size: $font-size-x-large;
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom:$padding-large;
   }
 
   .faq {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: $padding-small;
     width: 100%;
   }
 
   .faq-item {
     border-radius: 1rem;
-    background: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    background: $white-color;
+    box-shadow: $box-shadow;
     width: 100%;
     box-sizing: border-box;
     overflow: hidden;
@@ -113,14 +93,14 @@ html {
   align-items: center;
   width: 100%;
   text-align: left;
-  padding: 1.2rem;
-  background-color: #ffffff;
+  padding: $padding-medium;
+  background-color: $white-color;
   font-weight: bold;
   cursor: pointer;
-  font-size: 1.1rem;
+  font-size: $font-size-medium;
   border: none;
   box-sizing: border-box;
-  gap: 1rem;
+  gap: $padding-medium;
 
   .text {
     flex-grow: 1;
@@ -129,8 +109,8 @@ html {
   }
 
   .arrow {
-    font-size: 0.8rem;
-    color: #cccccc;
+    font-size: $font-size-x-small;
+    color: $gray-color;
     transition: transform 0.4s ease;
   }
 
@@ -144,23 +124,27 @@ html {
   height: 0;
   overflow: hidden;
   transition: all 0.3s ease;
-  padding: 0 1.2rem;
-  background-color: #fff;
-  border-top: 1px solid #eee;
-  font-size: 1rem;
+  padding: 0 $padding-small;
+  background-color: $white-color;
+  border-top: 1px solid $dark-white-color;
+  font-size: $font-size-small;
   line-height: 1.6;
   box-sizing: border-box;
   opacity: 0;
+
+  button {
+    color: $text-color;
+  }
 }
 
 .faq-answer.expanded {
   height: auto;
-  padding: 1.2rem;
+  padding: $padding-medium;
   opacity: 1;
 }
 
   .faq-item:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: $box-shadow;
   }
 
 }
