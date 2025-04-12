@@ -371,6 +371,9 @@ html {
 }
 
 .button-main {
+  max-width: 300px;
+  width: 60%;
+  min-width: 150px;
   background: #1F2041;
   color: #f7f7f7;
   border: none;
@@ -379,6 +382,7 @@ html {
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: auto;
+  align-self: center;
 }
 .button-main:hover {
   background: rgb(14.53125, 15, 30.46875);
@@ -437,6 +441,60 @@ html {
   border: 1px solid rgb(221.5, 221.5, 221.5);
   border-radius: 0.375rem;
   font-size: 1rem;
+}
+
+.auth-form {
+  max-width: 600px;
+  width: 80%;
+  margin: 4rem auto;
+  padding: 1rem;
+  background-color: #f7f7f7;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+.auth-form h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #1F2041;
+}
+.auth-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.auth-form form label {
+  font-size: 1rem;
+  color: #222222;
+}
+.auth-form form input {
+  padding: 0.75rem;
+  border: 1px solid #636363;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+}
+.auth-form p {
+  align-self: center;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+}
+.auth-form p a {
+  color: #1F2041;
+  text-decoration: none;
+}
+.auth-form p a:hover {
+  text-decoration: underline;
+}
+
+.error-messages {
+  color: red;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+.error-messages li {
+  margin-left: 1rem;
+  list-style: disc;
 }
 
 /*# sourceMappingURL=main.css.map */

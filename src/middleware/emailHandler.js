@@ -118,4 +118,20 @@ const sendClassRegistrationEmail = async ( user, clss, cancelUrlBase ) => {
   await transporter.sendMail(mailOptions);
 };
 
-module.exports = { sendCourseRegistrationEmail, sendClassRegistrationEmail };
+//
+const sendPasswordResetEmail = async (user, resetUrl) => {
+  const html = `
+    <p>Hi ${user.name},</p>
+    <p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link will expire in 15 minutes.</p>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    to: user.email,
+    subject: "Password Reset Request",
+    html,
+  });
+};
+
+
+module.exports = { sendCourseRegistrationEmail, sendClassRegistrationEmail, sendPasswordResetEmail };

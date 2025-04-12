@@ -1,0 +1,38 @@
+<html>
+<head>
+  {{> header}}
+</head>
+<body>
+  {{> navBar}}
+
+  <main class="auth-form">
+    <h1>Register</h1>
+    <form method="POST" action="/register">
+      <label>Name</label>
+      <input type="text" name="name" required />
+
+      <label>Email</label>
+      <input type="email" name="email" required />
+
+      <label>Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <label>Confirm Password</label>
+      <input type="password" id="confirm-password" name="confirmPassword" required />
+
+      <button class="button-main" type="submit">Register</button>
+    </form>
+
+  <ul class="error-messages" id="error-messages">
+        {{#errorMessages}}
+        <li>{{msg}}</li>
+      {{/errorMessages}}
+  </ul>
+
+    <p><a href="/login">Already have an account? Login</a>
+    </p>
+  </main>
+
+  {{> footer}}
+</body>
+</html>
