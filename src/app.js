@@ -6,6 +6,7 @@ const cors = require("cors");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const indexRoutes = require("./routes/index");
+const cookieParser = require('cookie-parser');
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Public
 app.use(express.static(path.join(__dirname, "public")));

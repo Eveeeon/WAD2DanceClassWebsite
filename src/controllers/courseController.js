@@ -31,7 +31,6 @@ const getCourses = async (req, res) => {
     res.render("courses", {
       title: "Dance Courses",
       courses: formattedCourses,
-      isSignedIn: false,
     });
   } catch (error) {
     console.error("Error loading course page:", error);

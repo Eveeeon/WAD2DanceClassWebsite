@@ -1,85 +1,101 @@
-<html lang="en">
-<head>
-  {{> header}}
-</head>
+{{> header}}
 <body>
   {{> navBar}}
 
-<main class="page class-page">
-  <h2>Dance Classes</h2>
+  <main class="page class-page">
+    <h2>Dance Classes</h2>
 
-  <div class="month-nav">
-    <a href="/classes/prev?month={{currentMonth}}" class="prev-month">&#8592;</a>
-    <span class="current-month">{{currentMonth}}</span>
-    <a href="/classes/next?month={{currentMonth}}" class="next-month">&#8594;</a>
-  </div>
+    <div class="month-nav">
+      <a href="/classes/prev?month={{ currentMonth }}" class="prev-month"
+        >&#8592;</a
+      >
+      <span class="current-month">{{ currentMonth }}</span>
+      <a href="/classes/next?month={{ currentMonth }}" class="next-month"
+        >&#8594;</a
+      >
+    </div>
 
-  <div class="filters">
-    <select id="courseFilter">
-      <option value="">All Courses</option>
-      {{#uniqueCourses}}
+    <div class="filters">
+      <select id="courseFilter">
+        <option value="">All Courses</option>
+        {{#uniqueCourses}}
         <option value="{{.}}">{{.}}</option>
-      {{/uniqueCourses}}
-    </select>
-  </div>
+        {{/uniqueCourses}}
+      </select>
+    </div>
 
-  <div class="grid" id="classGrid">
-    {{#classes}}
-      <div class="card"
-           data-course="{{courseName}}"
-           tabindex="{{tabIndex}}">
-        <h3>{{name}}</h3>
-        <p class="description">{{description}}</p>
-        <p><strong>Course:</strong> {{courseName}}</p>
-        <p><strong>Start:</strong> {{formattedStartDateTime}}</p>
-        <p><strong>End:</strong> {{formattedEndDateTime}}</p>
-        <p><strong>Location:</strong> {{location}}</p>
-        <p><strong>Price:</strong> £{{price}}</p>
-        <button class="button-main register-btn"
-                data-class-id="{{_id}}"
-                data-class-name="{{name}}"
-                data-class-description="{{description}}"
-                data-class-start="{{formattedStartDateTime}}"
-                data-class-end="{{formattedEndDateTime}}"
-                data-class-location="{{location}}"
-                data-class-price="{{price}}">
+    <div class="grid" id="classGrid">
+      {{#classes}}
+      <div
+        class="card"
+        data-course="{{ courseName }}"
+        tabindex="{{ tabIndex }}"
+      >
+        <h3>{{ name }}</h3>
+        <p class="description">{{ description }}</p>
+        <p><strong>Course:</strong> {{ courseName }}</p>
+        <p><strong>Start:</strong> {{ formattedStartDateTime }}</p>
+        <p><strong>End:</strong> {{ formattedEndDateTime }}</p>
+        <p><strong>Location:</strong> {{ location }}</p>
+        <p><strong>Price:</strong> £{{ price }}</p>
+        <button
+          class="button-main register-btn"
+          data-class-id="{{ _id }}"
+          data-class-name="{{ name }}"
+          data-class-description="{{ description }}"
+          data-class-start="{{ formattedStartDateTime }}"
+          data-class-end="{{ formattedEndDateTime }}"
+          data-class-location="{{ location }}"
+          data-class-price="{{ price }}"
+        >
           Register
         </button>
       </div>
-    {{/classes}}
+      {{/classes}}
 
-    {{^classes}}
+      {{^classes}}
       <p class="no-items">No classes available.</p>
-    {{/classes}}
+      {{/classes}}
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="classModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3 id="modalClassName"></h3>
+      <p id="modalClassDescription"></p>
+      <p><strong>Location:</strong> <span id="modalClassLocation"></span></p>
+      <p><strong>Price:</strong> $<span id="modalClassPrice"></span></p>
+      <p><strong>Start Time:</strong> <span id="modalClassStartTime"></span></p>
+      <p><strong>End Time:</strong> <span id="modalClassEndTime"></span></p>
+
+      <form id="registerClassForm">
+        <label for="name">Your Name:</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          required
+          placeholder="Enter your name"
+        />
+
+        <label for="email">Your Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="Enter your email"
+        />
+
+        <input type="hidden" id="modalClassId" name="classId" />
+
+        <button class="button-main" type="submit">Register</button>
+      </form>
+    </div>
   </div>
-</main>
 
-<!-- Modal -->
-<div id="classModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <h3 id="modalClassName"></h3>
-    <p id="modalClassDescription"></p>
-    <p><strong>Location:</strong> <span id="modalClassLocation"></span></p>
-    <p><strong>Price:</strong> $<span id="modalClassPrice"></span></p>
-    <p><strong>Start Time:</strong> <span id="modalClassStartTime"></span></p>
-    <p><strong>End Time:</strong> <span id="modalClassEndTime"></span></p>
-
-    <form id="registerClassForm">
-      <label for="name">Your Name:</label>
-      <input type="text" id="name" name="name" required placeholder="Enter your name" />
-
-      <label for="email">Your Email:</label>
-      <input type="email" id="email" name="email" required placeholder="Enter your email" />
-
-      <input type="hidden" id="modalClassId" name="classId" />
-
-      <button class="button-main" type="submit">Register</button>
-    </form>
-  </div>
-</div>
-
-{{> footer}}
-<script src="/js/classes.js"></script>
+  {{> footer}}
+  <script src="/js/classes.js"></script>
 </body>
-</html>

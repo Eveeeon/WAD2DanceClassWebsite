@@ -1,72 +1,88 @@
-<html lang="en">
-<head>
-  {{> header}}
-</head>
+{{> header}}
 <body>
   {{> navBar}}
 
-<main class="page course-page">
-  <div class="grid">
-    {{#courses}}
-      <div class="card" tabindex="{{tabIndex}}">
-        <h3>{{name}}</h3>
-        <p class="description">{{description}}</p>
-        <p class="start-date"><strong>Start Date:</strong> {{formattedStartDate}}</p>
-        <p class="location"><strong>Location:</strong> {{location}}</p>
-        <p class="price"><strong>Price:</strong> £{{price}}</p>
+  <main class="page course-page">
+    <div class="grid">
+      {{#courses}}
+      <div class="card" tabindex="{{ tabIndex }}">
+        <h3>{{ name }}</h3>
+        <p class="description">{{ description }}</p>
+        <p class="start-date">
+          <strong>Start Date:</strong> {{ formattedStartDate }}
+        </p>
+        <p class="location"><strong>Location:</strong> {{ location }}</p>
+        <p class="price"><strong>Price:</strong> £{{ price }}</p>
 
         {{#fullyBooked}}
-          <button class="button-main register-btn" disabled>Not Available</button>
+        <button class="button-main register-btn" disabled>Not Available</button>
         {{/fullyBooked}}
 
         {{^fullyBooked}}
-          <button class="button-main register-btn" 
-                  data-course-id="{{_id}}" 
-                  data-course-name="{{name}}" 
-                  data-course-description="{{description}}" 
-                  data-course-location="{{location}}" 
-                  data-course-price="{{price}}" 
-                  data-course-duration="{{duration}}" 
-                  data-course-date="{{formattedStartDate}}">
-            Register
-          </button>
+        <button
+          class="button-main register-btn"
+          data-course-id="{{ _id }}"
+          data-course-name="{{ name }}"
+          data-course-description="{{ description }}"
+          data-course-location="{{ location }}"
+          data-course-price="{{ price }}"
+          data-course-duration="{{ duration }}"
+          data-course-date="{{ formattedStartDate }}"
+        >
+          Register
+        </button>
         {{/fullyBooked}}
       </div>
-    {{/courses}}
+      {{/courses}}
 
-    {{^courses}}
+      {{^courses}}
       <p class="no-items">No courses available at the moment.</p>
-    {{/courses}}
+      {{/courses}}
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div id="courseModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+
+      <h3 id="modalCourseName"></h3>
+      <p id="modalCourseDescription"></p>
+      <p><strong>Location:</strong> <span id="modalCourseLocation"></span></p>
+      <p><strong>Price:</strong> $<span id="modalCoursePrice"></span></p>
+      <p><strong>Duration:</strong> <span id="modalCourseDuration"></span></p>
+      <p>
+        <strong>Start Date:</strong> <span id="modalCourseStartDate"></span>
+      </p>
+
+      <form id="registerForm">
+        <label for="name">Your Name:</label>
+        <input
+          type="name"
+          id="name"
+          name="name"
+          required
+          placeholder="Enter your name"
+        />
+
+        <label for="email">Your Email:</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          required
+          placeholder="Enter your email"
+        />
+
+        <input type="hidden" id="modalCourseId" name="courseId" />
+
+        <button class="button-main" type="submit" id="registerCourseBtn">
+          Register for Course
+        </button>
+      </form>
+    </div>
   </div>
-</main>
 
-<!-- Modal -->
-<div id="courseModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    
-    <h3 id="modalCourseName"></h3>
-    <p id="modalCourseDescription"></p>
-    <p><strong>Location:</strong> <span id="modalCourseLocation"></span></p>
-    <p><strong>Price:</strong> $<span id="modalCoursePrice"></span></p>
-    <p><strong>Duration:</strong> <span id="modalCourseDuration"></span></p>
-    <p><strong>Start Date:</strong> <span id="modalCourseStartDate"></span></p>
-
-    <form id="registerForm">
-      <label for="name">Your Name:</label>
-      <input type="name" id="name" name="name" required placeholder="Enter your name" />
-
-      <label for="email">Your Email:</label>
-      <input type="email" id="email" name="email" required placeholder="Enter your email" />
-
-      <input type="hidden" id="modalCourseId" name="courseId" />
-
-      <button class="button-main" type="submit" id="registerCourseBtn">Register for Course</button>
-    </form>
-  </div>
-</div>
-
-{{> footer}}
-<script src="/js/courses.js"></script>
+  {{> footer}}
+  <script src="/js/courses.js"></script>
 </body>
-</html>

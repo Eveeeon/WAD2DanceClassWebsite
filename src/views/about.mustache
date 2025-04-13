@@ -1,16 +1,11 @@
-<html>
-<head>
-  {{> header}}
-</head>
+{{> header}}
 <body>
   {{> navBar}}
 
   <main class="about">
     <section class="about-intro">
-      <h2>{{aboutInfo.title}}</h2>
-      <p>
-        {{{aboutInfo.description}}}
-      </p>
+      <h2>{{ aboutInfo.title }}</h2>
+      <p>{{{aboutInfo.description}}}</p>
     </section>
 
     <section class="about-locations">
@@ -18,8 +13,8 @@
       <ul class="location-list">
         {{#locations}}
         <li class="location-item">
-          <h4>{{name}}</h4>
-          <p>{{address}}</p>
+          <h4>{{ name }}</h4>
+          <p>{{ address }}</p>
         </li>
         {{/locations}}
       </ul>
@@ -32,10 +27,10 @@
         {{#faqs}}
         <div class="faq-item">
           <button class="faq-question">
-            <span class="text">{{question}}</span>
+            <span class="text">{{ question }}</span>
             <span class="arrow">&#9660;</span>
           </button>
-          <div class="faq-answer hidden">{{answer}}</div>
+          <div class="faq-answer hidden">{{ answer }}</div>
         </div>
         {{/faqs}}
       </div>
@@ -46,4 +41,3 @@
 
   <script src="/js/about.js"></script>
 </body>
-</html>

@@ -4,6 +4,7 @@ const {
 } = require("../middleware/generateCourses.js");
 
 const locationDAO = require("../DAOs/locationDAO");
+const userDAO = require("../DAOs/userDAO");
 
 // Define location data
 const locationStrings = [
@@ -98,7 +99,27 @@ const seed = async () => {
       locationStrings.map(address => locationDAO.insert({ address }))
     );
 
-    // Generate recurring courses with real location objects
+    // Create users
+    const adminUser = await userDAO.createUser({
+      name: "Admin User",
+      email: "admin@example.com",
+      password: "adminpassword123!",
+    });
+
+    const organiserUser = await userDAO.createUser({
+      name: "Organiser User",
+      email: "organiser@example.com",
+      password: "organiserpassword123!",
+    });
+
+    // Set roles for users
+    await userDAO.updateRole(adminUser._id, "admin");
+    await userDAO.updateRole(organiserUser._id, "organiser");
+
+    // Get IDs to assign to courses
+    const organiserIds = [adminUser._id, organiserUser._id]; 
+
+    // Generate recurring courses with locations
     for (const course of recurringCourses) {
       const loc = insertedLocations[course.location];
       await generateRecurringCourse(
@@ -114,7 +135,8 @@ const seed = async () => {
         course.startDateDay,
         course.time,
         course.courseCapacity,
-        course.classCapacity  
+        course.classCapacity,
+        organiserIds  
       );
     }
 
@@ -138,7 +160,8 @@ const seed = async () => {
       workshopStartDateMonth,
       workshopStartDateDay,
       courseCapacity,
-      classCapacity  
+      classCapacity,
+      organiserIds  
     );
 
     console.log("Dummy data has been added to the database.");

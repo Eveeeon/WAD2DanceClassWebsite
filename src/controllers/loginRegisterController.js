@@ -4,7 +4,7 @@ const validator = require("validator");
 const {
   hashPassword,
   comparePassword,
-  generateToken,
+  generateTokens,
 } = require("../middleware/auth");
 
 const { sendPasswordResetEmail } = require("../middleware/emailHandler");
@@ -90,78 +90,122 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await userDAO.findByEmail(email);
-    if (!user) return res.status(401).send("Invalid email or password");
+    if (!user) {
+      return res.status(401).render("login", {
+        title: "Login",
+        errorMessages: [{ msg: "Invalid email or password" }],
+      });
+    }
 
     const match = await comparePassword(password, user.password);
-    if (!match) return res.status(401).send("Invalid email or password");
+    if (!match) {
+      return res.status(401).render("login", {
+        title: "Login",
+        errorMessages: [{ msg: "Invalid email or password" }],
+      });
+    }
 
-    const token = generateToken(user);
-    res.status(200).json({ token });
+    // Generate tokens
+    const { accessToken, refreshToken } = generateTokens(user);
+
+    // Set refresh token in secure cookie
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "Strict",
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
+    // Store the access token in a cookie
+    res.cookie("accessToken", accessToken, {
+      httpOnly: false, // Need JavaScript access
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
+    res.redirect("/");
   } catch (err) {
-    res.status(500).send("Something went wrong");
+    console.error("Login error:", err);
+    res.status(500).render("login", {
+      title: "Login",
+      errorMessages: [{ msg: "Something went wrong, please try again later." }],
+    });
   }
+};
+
+// Handle logout
+const logout = (req, res) => {
+  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken");
+  // Return JSON response to handle in frontend js (so session is closed and tokens are cleared properly)
+  res.json({ success: true, redirectUrl: "/login" });
 };
 
 // Send password reset link
 const sendResetLink = async (req, res) => {
-    const { email } = req.body;
-  
-    try {
-      const user = await userDAO.findByEmail(email);
-      if (user) {
-        const token = jwt.sign({ userId: user._id }, JWT_RESET_SECRET, {
-          expiresIn: "15m",
-        });
-  
-        const resetUrl = `${process.env.BASE_URL}/resetPassword/${token}`;
-        await sendPasswordResetEmail(user, resetUrl);
-      }
-  
-      // Return JSON response instead of rendering
-      res.json({ success: true, message: "If the email exists, a reset link has been sent." });
-    } catch (err) {
-      res.status(500).json({ success: false, message: "Error sending reset link" });
+  const { email } = req.body;
+
+  try {
+    const user = await userDAO.findByEmail(email);
+    if (user) {
+      const token = jwt.sign({ userId: user._id }, JWT_RESET_SECRET, {
+        expiresIn: "15m",
+      });
+
+      const resetUrl = `${process.env.BASE_URL}/resetPassword/${token}`;
+      await sendPasswordResetEmail(user, resetUrl);
     }
-  };
-  
+
+    res.json({
+      success: true,
+      message: "If the email exists, a reset link has been sent.",
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error sending reset link" });
+  }
+};
 
 // Handle password reset
 const handleResetPassword = async (req, res) => {
-    const { token } = req.params;
-    const { password, confirmPassword } = req.body;
-  
-    const errors = [];
-  
-    if (password !== confirmPassword) {
-      errors.push({ msg: "Passwords do not match" });
-    }
-  
-    errors.push(...validatePassword(password));
-  
-    if (errors.length > 0) {
-      return res.status(400).render("resetPassword", {
-        token,
-        title: "Reset Password",
-        errorMessages: errors,
-      });
-    }
-  
-    try {
-      const decoded = jwt.verify(token, JWT_RESET_SECRET);
-      const hashed = await hashPassword(password);
-      await userDAO.updatePassword(decoded.userId, hashed);
-      res.render("login", {
-        title: "Login",
-        successMessage: "Password successfully reset. Please log in.",
-      });
-    } catch (err) {
-      return res.status(400).render("resetPassword", {
-        token: null,
-        title: "Reset Password",
-        errorMessages: [{ msg: "Invalid or expired token. Please request a new link." }],
-      });
-    }
-  };
+  const { token } = req.params;
+  const { password, confirmPassword } = req.body;
+
+  const errors = [];
+
+  if (password !== confirmPassword) {
+    errors.push({ msg: "Passwords do not match" });
+  }
+
+  errors.push(...validatePassword(password));
+
+  if (errors.length > 0) {
+    return res.status(400).render("resetPassword", {
+      token,
+      title: "Reset Password",
+      errorMessages: errors,
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_RESET_SECRET);
+    const hashed = await hashPassword(password);
+    await userDAO.updatePassword(decoded.userId, hashed);
+    res.render("login", {
+      title: "Login",
+      successMessage: "Password successfully reset. Please log in.",
+    });
+  } catch (err) {
+    return res.status(400).render("resetPassword", {
+      token: null,
+      title: "Reset Password",
+      errorMessages: [
+        { msg: "Invalid or expired token. Please request a new link." },
+      ],
+    });
+  }
+};
 
 module.exports = {
   renderLogin,
@@ -170,6 +214,7 @@ module.exports = {
   renderResetPasswordForm,
   register,
   login,
+  logout,
   sendResetLink,
   handleResetPassword,
 };

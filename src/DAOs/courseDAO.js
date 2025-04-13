@@ -65,6 +65,20 @@ class CourseDAO {
     });
   }
 
+  async findByOrganiserId(organiserId) {
+    return new Promise((resolve, reject) => {
+      this.db.find({ organisers: organiserId }, (err, docs) => {
+        if (err) {
+          logger.error({ err, op: "findByOrganiserId", organiserId }, "Failed to find courses by organiser ID");
+          return reject(err);
+        }
+        logger.info({ op: "findByOrganiserId", organiserId, count: docs.length }, "Found courses for organiser");
+        resolve(docs);
+      });
+    });
+  }
+  
+
   async findAll() {
     return new Promise((resolve, reject) => {
       this.db.find({}, (err, docs) => {

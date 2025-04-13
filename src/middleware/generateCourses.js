@@ -17,11 +17,15 @@ const generateRecurringCourse = async (
   startDay,
   time,
   courseCapacity,
-  classCapacity
+  classCapacity,
+  organiserIds
 ) => {
   const [hour, minute] = time.split(":").map(Number);
 
-  const courseStartDate = moment(`${startYear}-${startMonth}-${startDay}`, "YYYY-MM-DD").startOf("day");
+  const courseStartDate = moment(
+    `${startYear}-${startMonth}-${startDay}`,
+    "YYYY-MM-DD"
+  ).startOf("day");
   const courseEndDate = moment(courseStartDate).add(durationWeeks - 1, "weeks");
 
   const course = new Course(
@@ -33,7 +37,8 @@ const generateRecurringCourse = async (
     `${durationWeeks} weeks`,
     courseStartDate.toDate(),
     courseEndDate.toDate(),
-    courseCapacity
+    courseCapacity,
+    organiserIds
   );
 
   const insertedCourse = await courseDAO.insert(course);
@@ -85,9 +90,13 @@ const generateWorkshopCourse = async (
   startMonth,
   startDay,
   courseCapacity,
-  classCapacity
+  classCapacity,
+  organiserIds
 ) => {
-  const courseStartDate = moment(`${startYear}-${startMonth}-${startDay}`, "YYYY-MM-DD");
+  const courseStartDate = moment(
+    `${startYear}-${startMonth}-${startDay}`,
+    "YYYY-MM-DD"
+  );
   const courseEndDate = moment(courseStartDate).add(7, "days");
 
   const course = new Course(
@@ -99,7 +108,8 @@ const generateWorkshopCourse = async (
     "Weekend Workshop",
     courseStartDate.toDate(),
     courseEndDate.toDate(),
-    courseCapacity
+    courseCapacity,
+    organiserIds
   );
 
   const insertedCourse = await courseDAO.insert(course);

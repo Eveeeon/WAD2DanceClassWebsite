@@ -15,17 +15,24 @@
       <a href="/classes" class="navbar-link">Classes</a>
 
       {{#isSignedIn}}
-        <div class="navbar-auth navbar-signed-in">
-          <a href="/manage-classes" class="navbar-link">Manage Classes</a>
-          <a href="/profile" class="navbar-link">Profile</a>
-          <a href="/sign-out" class="navbar-link">Sign Out</a>
-        </div>
+      <div class="navbar-auth navbar-signed-in">
+        {{#isAdmin}}
+        <a href="/manageCourses" class="navbar-link">Manage Courses</a>
+        <a href="/adminConsole" class="navbar-link">Admin Console</a>
+        {{/isAdmin}}
+
+        {{#isOrganiser}}
+        <a href="/manageCourses" class="navbar-link">Manage Courses</a>
+        {{/isOrganiser}}
+
+        <a href="#" id="logout-button" class="navbar-link">Sign Out</a>
+      </div>
       {{/isSignedIn}}
 
       {{^isSignedIn}}
-        <div class="navbar-auth navbar-sign-in">
-          <a href="/login" class="navbar-link">Sign In</a>
-        </div>
+      <div class="navbar-auth navbar-sign-in">
+        <a href="/login" class="navbar-link">Sign In</a>
+      </div>
       {{/isSignedIn}}
     </nav>
   </div>

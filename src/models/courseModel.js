@@ -1,5 +1,5 @@
 class Course {
-  constructor(name, description, type, location, price, duration, endDate, startDate, capacity) {
+  constructor(name, description, type, location, price, duration, endDate, startDate, capacity, organsierIds) {
     this.name = name;
     this.description = description;
     this.type = type; // Recurring or Workshop or Custom
@@ -11,6 +11,7 @@ class Course {
     this.capacity = capacity;
     this.active = true; // Enables the organiser to cancel
     this.attendees = []; // List of attendees for this course
+    this.organisers = organsierIds; // Organiser IDs
   }
 }
 

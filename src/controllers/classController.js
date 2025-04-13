@@ -8,12 +8,15 @@ const { sendClassRegistrationEmail } = require("../middleware/emailHandler");
 // Default to the current month if not provided
 const getClasses = async (req, res) => {
   try {
-    const monthParam = req.query.month || moment().format("YYYY-MM");  // "YYYY-MM" format
+    const monthParam = req.query.month || moment().format("YYYY-MM"); // "YYYY-MM" format
     const startOfMonth = moment(monthParam, "YYYY-MM").startOf("month");
     const endOfMonth = moment(monthParam, "YYYY-MM").endOf("month");
 
     // Fetch classes within the specified date range
-    const classes = await classDAO.findByStartDateRange(startOfMonth.toDate(), endOfMonth.toDate());
+    const classes = await classDAO.findByStartDateRange(
+      startOfMonth.toDate(),
+      endOfMonth.toDate()
+    );
     const courses = await courseDAO.findAll();
 
     // Map course IDs to course names
@@ -26,13 +29,19 @@ const getClasses = async (req, res) => {
     const formattedClasses = classes.map((cls, index) => ({
       ...cls,
       courseName: courseMap[cls.courseId] || "Not Part of a Course",
-      formattedStartDateTime: moment(cls.startDateTime).format("MMMM Do, YYYY, h:mm A"),
-      formattedEndDateTime: moment(cls.endDateTime).format("MMMM Do, YYYY, h:mm A"),
+      formattedStartDateTime: moment(cls.startDateTime).format(
+        "MMMM Do, YYYY, h:mm A"
+      ),
+      formattedEndDateTime: moment(cls.endDateTime).format(
+        "MMMM Do, YYYY, h:mm A"
+      ),
       tabIndex: index + 1,
     }));
 
     // Get unique course names
-    const uniqueCourses = [...new Set(formattedClasses.map(cls => cls.courseName))];
+    const uniqueCourses = [
+      ...new Set(formattedClasses.map((cls) => cls.courseName)),
+    ];
 
     // Render the page with the filtered classes for the selected month
     res.render("classes", {
@@ -40,7 +49,6 @@ const getClasses = async (req, res) => {
       uniqueCourses,
       classes: formattedClasses,
       currentMonth: monthParam,
-      isSignedIn: false,
     });
   } catch (err) {
     console.error("Error loading classes:", err);
@@ -54,7 +62,9 @@ const changeMonth = (req, res) => {
   const direction = req.params.direction;
 
   // Calculate the new month based on the direction
-  const newMonth = moment(currentMonth, "YYYY-MM").add(direction === "next" ? 1 : -1, "months").format("YYYY-MM");
+  const newMonth = moment(currentMonth, "YYYY-MM")
+    .add(direction === "next" ? 1 : -1, "months")
+    .format("YYYY-MM");
 
   // Redirect to the updated month
   res.redirect(`/classes?month=${newMonth}`);
@@ -71,7 +81,9 @@ const registerForClass = async (req, res) => {
     !email ||
     !validator.isEmail(email)
   ) {
-    return res.status(400).json({ message: "Please provide valid name and email." });
+    return res
+      .status(400)
+      .json({ message: "Please provide valid name and email." });
   }
 
   try {
@@ -80,13 +92,18 @@ const registerForClass = async (req, res) => {
     if (!clss) return res.status(404).json({ message: "Class not found." });
 
     // Check if fully booked
-    if (clss.attendees.length >= clss.capacity ) {
-      return res.status(400).json({ message: "Sorry, this class is fully booked." });
+    if (clss.attendees.length >= clss.capacity) {
+      return res
+        .status(400)
+        .json({ message: "Sorry, this class is fully booked." });
     }
 
     // Add attendee
-    const newAttendee = { name: name.trim(), email: email.toLowerCase().trim() };
-    await classDAO.addAttendee(classId , newAttendee);
+    const newAttendee = {
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+    };
+    await classDAO.addAttendee(classId, newAttendee);
 
     // Send confirmation email with cancellation link
     await sendClassRegistrationEmail(
