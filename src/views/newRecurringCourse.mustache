@@ -1,0 +1,25 @@
+{{> header}}
+<body>
+  {{> navBar}}
+  <main class="create-course-form-container">
+    <h1>Create New Recurring Course</h1>
+    <form id="recurringForm">
+      <input name="name" placeholder="Course Name" required>
+      <textarea name="description" placeholder="Description"></textarea>
+      <input name="location" placeholder="Location">
+      <input name="price" type="number" placeholder="Course Price">
+      <input name="pricePerClass" type="number" placeholder="Price Per Class">
+      <input name="classLength" type="number" placeholder="Class Length (minutes)">
+      <input name="durationWeeks" type="number" placeholder="Duration (weeks)">
+      <input name="startDate" type="date" required>
+      <input name="time" placeholder="Start Time (HH:mm)">
+      <a>The number of attendees that can join every class. Set to 0 for a drop-in only course.</a>
+      <input name="courseCapacity" type="number" placeholder="Course Capacity">
+      <a>The number of attendees that can join each class, distinct from the above</a>
+      <input name="classCapacity" type="number" placeholder="Class Capacity">
+      <button type="submit" class="button-primary">Create Recurring Course</button>
+    </form>
+  </main>
+  {{> footer}}
+  <script src="/js/createCourse.js"></script>
+</body>

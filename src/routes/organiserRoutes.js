@@ -2,9 +2,16 @@ const express = require("express");
 const router = express.Router();
 const manageCoursesController = require("../controllers/manageCoursesController");
 const { ensureCourseOrganiser, ensureClassOrganiser } = require("../middleware/auth");
+const newCourseController = require("../controllers/newCourseController");
 
 // View
 router.get("/manageCourses", manageCoursesController.getManageCourses);
+router.get('/new/workshopCourse', newCourseController.getNewWorkshopForm);
+router.get('/new/recurringCourse', newCourseController.getNewRecurringForm);
+router.post('/new/recurringCourse', newCourseController.createRecurringCourse);
+router.post('/new/workshopCourse', newCourseController.createWorkshopCourse);
+
+
 
 // Course management
 router.post("/courses/:id/cancel", ensureCourseOrganiser, manageCoursesController.cancelCourse);

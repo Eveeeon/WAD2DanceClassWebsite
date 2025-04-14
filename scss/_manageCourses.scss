@@ -1,0 +1,165 @@
+@use "_variables" as *;
+
+.main-container {
+  max-width: 2000px;
+  width: 80%;
+  margin: 0 auto;
+  padding: $padding-medium;
+}
+
+.course-block {
+  background-color: $white-color;
+  padding: $padding-large;
+  border-radius: $border-radius;
+  border: 1px solid $dark-white-color;
+  margin-bottom: $gap;
+  box-shadow: $box-shadow;
+}
+
+.section-title {
+  font-size: $font-size-medium;
+  font-weight: 600;
+  margin: $padding-medium 0 $padding-small;
+}
+
+.section-subtitle {
+  font-size: $font-size-small;
+  font-weight: 700;
+  margin-top: $padding-medium;
+}
+
+.field-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: $padding-small 0;
+  border-bottom: 1px solid $dark-white-color;
+  flex-wrap: wrap;
+
+  strong {
+    font-weight: 700;
+    color: $text-color;
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .action-right {
+    margin-left: auto;
+  }
+}
+
+.button-secondary {
+  background: $modal-content-bg;
+  color: $text-color;
+  border: 1px solid $gray-color;
+  padding: $padding-x-small $padding-small;
+  border-radius: $border-radius;
+  font-size: $font-size-x-small;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-width: 100px;
+  max-width: 200px;
+
+  &:hover {
+    background: $dark-white-color;
+  }
+}
+
+.inline-form {
+  display: inline;
+}
+
+.organiser-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $gap-small;
+  align-items: center;
+  margin-top: $padding-small;
+}
+
+.organisers-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+
+  .organiser-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $padding-small;
+    border-bottom: 1px solid $dark-white-color;
+  }
+
+  .organiser-name {
+    font-size: $font-size-x-small;
+    color: $text-color;
+    padding: $padding-medium;
+  }
+}
+
+.class-section {
+  margin-top: $gap;
+  padding-top: $padding-medium;
+  border-top: 2px solid $gray-color;
+}
+
+.class-block {
+  background-color: $white-color;
+  border: 1px solid $gray-color;
+  border-radius: $border-radius;
+  padding: $padding-medium;
+  margin-top: $padding-medium;
+}
+
+// 🔽 Responsive Adjustments for Mobile
+@media (max-width: 768px) {
+  .main-container {
+    width: 95%;
+    padding: $padding-small;
+  }
+
+  .course-block {
+    padding: $padding-medium;
+  }
+
+  .section-title {
+    font-size: $font-size-small;
+  }
+
+  .field-block {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .action-right {
+      margin-left: 0;
+      margin-top: $padding-x-small;
+    }
+  }
+
+  .organiser-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .organisers-list .organiser-item {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .organiser-name,
+    button {
+      width: 100%;
+      margin-bottom: $padding-x-small;
+    }
+  }
+}
+
+.top-action-buttons {
+  display: flex;
+  align-items: center;
+  margin-bottom: $padding-medium;
+
+  .button-secondary {
+    margin: $padding-small;
+  }
+}

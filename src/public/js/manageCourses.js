@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Open the edit modal with proper input fields
   const openEditModal = (field, id, currentValue, entityType) => {
-    fieldName.innerText = field;
+    fieldName.innerText = "Edit " + field;
 
     let valueToUse =
       field === lastField && lastValue !== null ? lastValue : currentValue;

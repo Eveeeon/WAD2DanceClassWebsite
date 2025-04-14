@@ -1,0 +1,24 @@
+{{> header}}
+<body>
+  {{> navBar}}
+  <main class="create-course-form-container">
+    <h1>Create New Workshop</h1>
+    <form id="workshopForm">
+      <input name="name" placeholder="Workshop Name" required>
+      <textarea name="description" placeholder="Description"></textarea>
+      <input name="location" placeholder="Location">
+      <input name="price" type="number" placeholder="Course Price">
+      <input name="pricePerClass" type="number" placeholder="Price Per Class">
+      <input name="classLength" type="number" placeholder="Class Length (minutes)">
+      <a>Workshops have fixed times, and must start on a Saturday, see about for more details</a>
+      <input name="startDate" type="date" required>
+      <a>The number of attendees that can join every class. Set to 0 for a drop-in only course.</a>
+      <input name="courseCapacity" type="number" placeholder="Course Capacity">
+      <a>The number of attendees that can join each class, distinct from the above</a>
+      <input name="classCapacity" type="number" placeholder="Class Capacity">
+      <button type="submit" class="button-primary">Create Workshop</button>
+    </form>
+  </main>
+  {{> footer}}
+  <script src="/js/createCourse.js"></script>
+</body>

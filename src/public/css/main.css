@@ -497,4 +497,210 @@ html {
   list-style: disc;
 }
 
+.main-container {
+  max-width: 2000px;
+  width: 80%;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.course-block {
+  background-color: #f7f7f7;
+  padding: 2rem;
+  border-radius: 0.375rem;
+  border: 1px solid #eaeaea;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1rem 0 0.75rem;
+}
+
+.section-subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.field-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #eaeaea;
+  flex-wrap: wrap;
+}
+.field-block strong {
+  font-weight: 700;
+  color: #222222;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+.field-block .action-right {
+  margin-left: auto;
+}
+
+.button-secondary {
+  background: #f5f5f5;
+  color: #222222;
+  border: 1px solid #636363;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-width: 100px;
+  max-width: 200px;
+}
+.button-secondary:hover {
+  background: #eaeaea;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.organiser-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.75rem;
+}
+
+.organisers-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+.organisers-list .organiser-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eaeaea;
+}
+.organisers-list .organiser-name {
+  font-size: 0.875rem;
+  color: #222222;
+  padding: 1rem;
+}
+
+.class-section {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid #636363;
+}
+
+.class-block {
+  background-color: #f7f7f7;
+  border: 1px solid #636363;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    width: 95%;
+    padding: 0.75rem;
+  }
+  .course-block {
+    padding: 1rem;
+  }
+  .section-title {
+    font-size: 1rem;
+  }
+  .field-block {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .field-block .action-right {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+  .organiser-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .organisers-list .organiser-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .organisers-list .organiser-item .organiser-name,
+  .organisers-list .organiser-item button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+.top-action-buttons {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.top-action-buttons .button-secondary {
+  margin: 0.75rem;
+}
+
+.create-course-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem;
+  background-color: #f7f7f7;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.create-course-form-container input,
+.create-course-form-container textarea,
+.create-course-form-container button {
+  margin: 1rem;
+  padding: 0.75rem;
+  font-size: 1.25rem;
+  border: 1px solid #636363;
+  border-radius: 0.375rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.create-course-form-container input:focus,
+.create-course-form-container textarea:focus {
+  outline: none;
+  border-color: #1F2041;
+}
+.create-course-form-container textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.create-course-form-container button {
+  background-color: #1F2041;
+  color: #f7f7f7;
+  border: none;
+  cursor: pointer;
+}
+.create-course-form-container button:hover {
+  background-color: #4B3F72;
+}
+.create-course-form-container h1 {
+  font-size: 1.75rem;
+  color: #1F2041;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .create-course-form-container {
+    padding: 2rem;
+  }
+  .create-course-form-container input,
+  .create-course-form-container textarea,
+  .create-course-form-container button {
+    font-size: 1rem;
+  }
+}
+
 /*# sourceMappingURL=main.css.map */

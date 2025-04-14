@@ -13,10 +13,16 @@ const getManageCourses = async (req, res) => {
     const courseWithClasses = await Promise.all(
       courses.map(async (course, index) => {
         // Map organiser IDs to their corresponding names and IDs
-        const organisers = course.organisers.map((organiserId) => {
-          const organiser = allOrganisers.find((org) => org._id === organiserId);
-          return organiser ? { name: organiser.name, id: organiser._id } : null;
-        }).filter(Boolean);
+        const organisers = course.organisers
+          .map((organiserId) => {
+            const organiser = allOrganisers.find(
+              (org) => org._id === organiserId
+            );
+            return organiser
+              ? { name: organiser.name, id: organiser._id }
+              : null;
+          })
+          .filter(Boolean);
 
         const classes = await classDAO.findByCourseId(course._id);
 
@@ -24,20 +30,28 @@ const getManageCourses = async (req, res) => {
           classes.map(async (cls) => {
             return {
               ...cls,
-              formattedStartDateTime: moment(cls.startDateTime).format("dddd, MMM Do YYYY, h:mm a"),
-              formattedEndDateTime: moment(cls.endDateTime).format("dddd, MMM Do YYYY, h:mm a"),
+              formattedStartDateTime: moment(cls.startDateTime).format(
+                "dddd, MMM Do YYYY, h:mm a"
+              ),
+              formattedEndDateTime: moment(cls.endDateTime).format(
+                "dddd, MMM Do YYYY, h:mm a"
+              ),
               isCancelled: cls.active === false,
             };
           })
         );
 
         // Sort classes by start date
-        formattedClasses.sort((a, b) => new Date(b.startDateTime) - new Date(a.startDateTime));
+        formattedClasses.sort(
+          (a, b) => new Date(b.startDateTime) - new Date(a.startDateTime)
+        );
 
         return {
           ...course,
           organisers,
-          formattedStartDate: moment(course.startDate).format("dddd, MMMM Do YYYY"),
+          formattedStartDate: moment(course.startDate).format(
+            "dddd, MMMM Do YYYY"
+          ),
           formattedEndDate: moment(course.endDate).format("dddd, MMMM Do YYYY"),
           classes: formattedClasses,
           isCancelled: course.active === false,
@@ -46,7 +60,7 @@ const getManageCourses = async (req, res) => {
     );
 
     res.render("manageCourses", {
-      title: "My Courses & Classes",
+      title: "Manage Courses & Classes",
       courseWithClasses,
       allOrganisers,
     });
@@ -56,14 +70,15 @@ const getManageCourses = async (req, res) => {
   }
 };
 
-
 const cancelClass = async (req, res) => {
   const classId = req.params.id;
   try {
     await classDAO.cancel(classId);
-    res
-      .status(200)
-      .json({ success: true, message: "Canceled Class Successfully" });
+    // res
+    //   .status(200)
+    //   .json({ success: true, message: "Canceled Class Successfully" });
+    // Manual redirect as a workaround to a bug in the frontend
+    res.redirect("/manageCourses");
   } catch (err) {
     console.error("Failed to cancel class", err);
     res.status(500).send("Failed to cancel class");
@@ -74,9 +89,11 @@ const cancelCourse = async (req, res) => {
   const courseId = req.params.id;
   try {
     await courseDAO.cancel(courseId);
-    res
-      .status(200)
-      .json({ success: true, message: "Canceled Course Successfully" });
+    // res
+    //   .status(200)
+    //   .json({ success: true, message: "Canceled Course Successfully" });
+    // Manual redirect as a workaround to a bug in the frontend
+    res.redirect("/manageCourses");
   } catch (err) {
     console.error("Failed to cancel course", err);
     res.status(500).send("Failed to cancel course");
@@ -89,7 +106,7 @@ const removeCourseAttendee = async (req, res) => {
   try {
     await courseDAO.removeAttendee(id, email);
     // res.status(200).json({ success: true, message: "Removed Attendee Successfully" });
-    // Manual redirect as a workaround to a bug in the frontend 
+    // Manual redirect as a workaround to a bug in the frontend
     res.redirect("/manageCourses");
   } catch (err) {
     console.error("Failed to remove course attendee", err);

@@ -1,0 +1,67 @@
+@use "_variables" as *;
+
+.create-course-form-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: $section-padding;
+  background-color: $white-color;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+
+  input,
+  textarea,
+  button {
+    margin: $padding-medium;
+    padding: $padding-small;
+    font-size: $font-size-medium;
+    border: 1px solid $gray-color;
+    border-radius: $border-radius;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: $primary-color;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  button {
+    background-color: $primary-color;
+    color: $white-color;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $secondary-color;
+    }
+  }
+
+  h1 {
+    font-size: $font-size-large;
+    color: $primary-color;
+    margin-bottom: $gap;
+  }
+}
+
+// For mobiles
+@media (max-width: 768px) {
+  .create-course-form-container {
+    padding: 2rem;
+  }
+
+  .create-course-form-container input,
+  .create-course-form-container textarea,
+  .create-course-form-container button {
+    font-size: $font-size-small;
+  }
+}
