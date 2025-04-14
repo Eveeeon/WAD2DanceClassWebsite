@@ -58,6 +58,7 @@
   overflow: auto;
   background-color: $modal-bg-color;
   padding: $padding-small;
+  box-sizing: border-box;
 
   .modal-content {
     background-color: $modal-content-bg;
@@ -67,6 +68,7 @@
     width: 100%;
     max-width: 500px;
     box-shadow: $box-shadow;
+    box-sizing: border-box;
 
     h3 {
       margin-bottom: $padding-small;
