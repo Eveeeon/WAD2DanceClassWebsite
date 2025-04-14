@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
+    "startWithTestData": "node src/scripts/dummyData.js && node src/index.js",
     "dev": "concurrently \"npm run sass\" \"npm run start\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sass": "sass --watch scss:src/public/css",
