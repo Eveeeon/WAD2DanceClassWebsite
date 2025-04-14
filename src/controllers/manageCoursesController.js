@@ -3,12 +3,6 @@ const classDAO = require("../DAOs/ClassDAO");
 const userDAO = require("../DAOs/userDAO");
 const moment = require("moment");
 
-// Helper function as we are already getting all organisers
-const getOrganiserNameById = (organiserId, allOrganisers) => {
-  const organiser = allOrganisers.find((org) => org._id === organiserId);
-  return organiser ? organiser.name : "Unknown";
-};
-
 const getManageCourses = async (req, res) => {
   const organiserId = req.user.userId;
 
@@ -18,45 +12,32 @@ const getManageCourses = async (req, res) => {
 
     const courseWithClasses = await Promise.all(
       courses.map(async (course, index) => {
-        // Map organiser IDs to names using the preloaded allOrganisers list
-        const organiserNames = (course.organisers || []).map((organiserId) =>
-          getOrganiserNameById(organiserId, allOrganisers)
-        );
+        // Map organiser IDs to their corresponding names and IDs
+        const organisers = course.organisers.map((organiserId) => {
+          const organiser = allOrganisers.find((org) => org._id === organiserId);
+          return organiser ? { name: organiser.name, id: organiser._id } : null;
+        }).filter(Boolean);
 
         const classes = await classDAO.findByCourseId(course._id);
 
         const formattedClasses = await Promise.all(
           classes.map(async (cls) => {
-            // For class organisers, use the same method
-            const classOrganiserNames = (cls.organisers || []).map(
-              (organiserId) => getOrganiserNameById(organiserId, allOrganisers)
-            );
-
             return {
               ...cls,
-              organiserNames: classOrganiserNames,
-              formattedStartDateTime: moment(cls.startDateTime).format(
-                "dddd, MMM Do YYYY, h:mm a"
-              ),
-              formattedEndDateTime: moment(cls.endDateTime).format(
-                "dddd, MMM Do YYYY, h:mm a"
-              ),
+              formattedStartDateTime: moment(cls.startDateTime).format("dddd, MMM Do YYYY, h:mm a"),
+              formattedEndDateTime: moment(cls.endDateTime).format("dddd, MMM Do YYYY, h:mm a"),
               isCancelled: cls.active === false,
             };
           })
         );
 
         // Sort classes by start date
-        formattedClasses.sort(
-          (a, b) => new Date(b.startDateTime) - new Date(a.startDateTime)
-        );
+        formattedClasses.sort((a, b) => new Date(b.startDateTime) - new Date(a.startDateTime));
 
         return {
           ...course,
-          organiserNames,
-          formattedStartDate: moment(course.startDate).format(
-            "dddd, MMMM Do YYYY"
-          ),
+          organisers,
+          formattedStartDate: moment(course.startDate).format("dddd, MMMM Do YYYY"),
           formattedEndDate: moment(course.endDate).format("dddd, MMMM Do YYYY"),
           classes: formattedClasses,
           isCancelled: course.active === false,
@@ -74,6 +55,7 @@ const getManageCourses = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
 
 const cancelClass = async (req, res) => {
   const classId = req.params.id;
@@ -200,7 +182,7 @@ const addCourseOrganiser = async (req, res) => {
 // Remove organiser from a course
 const removeCourseOrganiser = async (req, res) => {
   const courseId = req.params.id;
-  const { organiserId } = req.body;
+  const organiserId = req.params.organiserId;
 
   try {
     await courseDAO.removeOrganiser(courseId, organiserId);

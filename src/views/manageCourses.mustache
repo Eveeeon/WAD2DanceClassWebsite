@@ -48,13 +48,13 @@
       <h4>Organisers</h4>
       <ul>
         {{#organisers}}
-          <li>{{this}}
-            <button data-action="removeOrganiser" data-course-id="{{../_id}}" data-id="{{id}}" data-email="{{email}}">Remove</button>
+          <li>{{name}}
+            <button data-action="removeOrganiser" data-course-id="{{_id}}" data-id="{{id}}" data-email="{{email}}">Remove</button>
           </li>
         {{/organisers}}
       </ul>
 
-      <form method="POST" action="/courses/{{_id}}/organisers/add">
+      <form id="addOrganiserForm" data-course-id="{{_id}}" data-action="addOrganiser" style="display:inline;">
         <select name="organiserId">
           {{#allOrganisers}}
             <option value="{{_id}}">{{name}}</option>
@@ -62,6 +62,8 @@
         </select>
         <button type="submit">Add Organiser</button>
       </form>
+      
+      
 
       <h4>Attendees</h4>
       <ul>

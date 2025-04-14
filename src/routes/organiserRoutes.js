@@ -10,7 +10,7 @@ router.get("/manageCourses", manageCoursesController.getManageCourses);
 router.post("/courses/:id/cancel", ensureCourseOrganiser, manageCoursesController.cancelCourse);
 router.post("/courses/:id/updateField", ensureCourseOrganiser, manageCoursesController.updateCourseField);
 router.post("/courses/:id/addOrganiser", ensureCourseOrganiser, manageCoursesController.addCourseOrganiser);
-router.post("/courses/:id/removeOrganiser", ensureCourseOrganiser, manageCoursesController.removeCourseOrganiser);
+router.post("/courses/:id/removeOrganiser/:organiserId/remove", ensureCourseOrganiser, manageCoursesController.removeCourseOrganiser);
 router.post("/courses/:id/removeAttendee/:email/remove", ensureCourseOrganiser, manageCoursesController.removeCourseAttendee);
 
 // Class management
