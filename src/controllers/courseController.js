@@ -13,8 +13,7 @@ const getCourses = async (req, res) => {
       const currentAttendees = Array.isArray(course.attendees)
         ? course.attendees.length
         : 0;
-      const courseCapacity =
-        typeof course.capacity === "number" ? course.capacity : Infinity;
+      const courseCapacity = course.capacity;
       const isFull = currentAttendees >= courseCapacity;
 
       return {

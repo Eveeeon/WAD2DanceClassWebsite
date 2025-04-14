@@ -74,6 +74,15 @@ class UserDAO {
       );
     });
   }
+
+  async getAllOrganisers() {
+    return new Promise((resolve, reject) => {
+      this.db.find({ role: "organiser" }, (err, docs) => {
+        if (err) return reject(err);
+        resolve(docs);
+      });
+    });
+  }
 }
 
 module.exports = new UserDAO();

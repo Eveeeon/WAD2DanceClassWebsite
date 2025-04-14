@@ -10,7 +10,6 @@ const { verifyToken, isAuthenticated, requireRole, handleRefreshToken } = requir
 router.use(handleRefreshToken)
 router.use(verifyToken);
 router.use((req, res, next) => {
-  console.log("User:", req.user);
   const user = req.user;
   res.locals.isSignedIn = !!user;
   res.locals.user = user || null;

@@ -1,10 +1,151 @@
 {{> header}}
 <body>
   {{> navBar}}
-
   <main>
-    orangiser test
+
+    {{#courseWithClasses}}
+    <div class="course-block" style="border:1px solid #aaa; padding: 1rem; margin-bottom: 2rem;">
+      <h2>{{title}}</h2>
+
+      <p><strong>Description:</strong> {{description}}
+        <button data-edit data-field="description" data-id="{{_id}}" data-value="{{description}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Location:</strong> {{location}}
+        <button data-edit data-field="location" data-id="{{_id}}" data-value="{{location}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Price:</strong> ${{price}}
+        <button data-edit data-field="price" data-id="{{_id}}" data-value="{{price}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Duration (weeks):</strong> {{durationWeeks}}
+        <button data-edit data-field="durationWeeks" data-id="{{_id}}" data-value="{{durationWeeks}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Start:</strong> {{formattedStartDate}}
+        <button data-edit data-field="startDate" data-id="{{_id}}" data-value="{{startDate}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>End:</strong> {{formattedEndDate}}
+        <button data-edit data-field="endDate" data-id="{{_id}}" data-value="{{endDate}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Capacity:</strong> {{capacity}}
+        <button data-edit data-field="capacity" data-id="{{_id}}" data-value="{{capacity}}" data-entity="course">Edit</button>
+      </p>
+
+      <p><strong>Status:</strong> 
+        {{#isCancelled}} Cancelled{{/isCancelled}}
+        {{^isCancelled}}
+          Active
+          <form method="POST" action="/courses/{{_id}}/cancel" style="display:inline;">
+            <button type="submit">Cancel</button>
+          </form>
+        {{/isCancelled}}
+      </p>
+
+      <h4>Organisers</h4>
+      <ul>
+        {{#organisers}}
+          <li>{{this}}
+            <button data-action="removeOrganiser" data-course-id="{{../_id}}" data-id="{{id}}" data-email="{{email}}">Remove</button>
+          </li>
+        {{/organisers}}
+      </ul>
+
+      <form method="POST" action="/courses/{{_id}}/organisers/add">
+        <select name="organiserId">
+          {{#allOrganisers}}
+            <option value="{{_id}}">{{name}}</option>
+          {{/allOrganisers}}
+        </select>
+        <button type="submit">Add Organiser</button>
+      </form>
+
+      <h4>Attendees</h4>
+      <ul>
+        {{#attendees}}
+          <li>{{name}} ({{email}})
+            <form method="POST" action="/courses/{{_id}}/removeAttendee/{{email}}" style="display:inline;">
+              <button type="submit">Remove</button>
+            </form>
+          </li>
+        {{/attendees}}
+      </ul>
+      
+
+      <div style="margin-left: 1rem; border-left: 2px solid #999; padding-left: 1rem;">
+        <h3>Classes</h3>
+        {{#classes}}
+          <div class="class-block" style="border: 1px dashed #aaa; padding: 0.5rem; margin-bottom: 1rem;">
+
+            <p><strong>Description:</strong> {{description}}
+              <button data-edit data-field="description" data-id="{{_id}}" data-value="{{description}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>Location:</strong> {{location}}
+              <button data-edit data-field="location" data-id="{{_id}}" data-value="{{location}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>Price:</strong> ${{price}}
+              <button data-edit data-field="price" data-id="{{_id}}" data-value="{{price}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>Start:</strong> {{formattedStartDateTime}}
+              <button data-edit data-field="startDateTime" data-id="{{_id}}" data-value="{{startDateTime}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>End:</strong> {{formattedEndDateTime}}
+              <button data-edit data-field="endDateTime" data-id="{{_id}}" data-value="{{endDateTime}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>Capacity:</strong> {{capacity}}
+              <button data-edit data-field="capacity" data-id="{{_id}}" data-value="{{capacity}}" data-entity="class">Edit</button>
+            </p>
+
+            <p><strong>Status:</strong> 
+              {{#isCancelled}}Cancelled{{/isCancelled}}
+              {{^isCancelled}}
+                Active
+                <form method="POST" action="/classes/{{_id}}/cancel" style="display:inline;">
+                  <button type="submit">Cancel</button>
+                </form>
+              {{/isCancelled}}
+            </p>
+
+            <ul>
+              {{#attendees}}
+                <li>{{name}} ({{email}})
+                  <form method="POST" action="/classes/{{_id}}/removeAttendee/{{email}}" style="display:inline;">
+                    <button type="submit">Remove</button>
+                  </form>
+                </li>
+              {{/attendees}}
+            </ul>
+            
+          </div>
+        {{/classes}}
+      </div>
+    </div>
+    {{/courseWithClasses}}
+
   </main>
 
+  <!-- Modal -->
+  <div id="editModal" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%); background:#fff; border:1px solid #444; padding:1rem; z-index:1000;">
+    <form method="POST" id="editForm">
+      <h3>Edit <span id="editFieldName"></span></h3>
+      <div id="inputContainer"></div>
+
+      <div style="margin-top:1rem;">
+        <p>Are you sure?</p>
+        <button type="submit">Yes, Save</button>
+        <button type="button" id="closeModalBtn">Cancel</button>
+      </div>
+    </form>
+  </div>
+
   {{> footer}}
+  <script src="/js/manageCourses.js"></script>
 </body>

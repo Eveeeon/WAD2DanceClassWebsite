@@ -1,10 +1,8 @@
-const {
-  generateRecurringCourse,
-  generateWorkshopCourse,
-} = require("../middleware/generateCourses.js");
-
+const { generateRecurringCourse } = require("../middleware/generateCourses.js");
 const locationDAO = require("../DAOs/locationDAO");
 const userDAO = require("../DAOs/userDAO");
+const courseDAO = require("../DAOs/CourseDAO");
+const classDAO = require("../DAOs/ClassDAO");
 
 // Define location data
 const locationStrings = [
@@ -13,7 +11,7 @@ const locationStrings = [
   "The Move Zone, Jigglington, 00000",
 ];
 
-// Define course data (using indexes for location reference)
+// Define course data
 const recurringCourses = [
   {
     name: "Beginner Salsa",
@@ -96,7 +94,7 @@ const seed = async () => {
   try {
     // Insert all locations
     const insertedLocations = await Promise.all(
-      locationStrings.map(address => locationDAO.insert({ address }))
+      locationStrings.map((address) => locationDAO.insert({ address }))
     );
 
     // Create users
@@ -106,23 +104,57 @@ const seed = async () => {
       password: "adminpassword123!",
     });
 
-    const organiserUser = await userDAO.createUser({
-      name: "Organiser User",
-      email: "organiser@example.com",
-      password: "organiserpassword123!",
+    const organiser1 = await userDAO.createUser({
+      name: "Organiser 1",
+      email: "organiser1@example.com",
+      password: "password123!",
+    });
+    const organiser2 = await userDAO.createUser({
+      name: "Organiser 2",
+      email: "organiser2@example.com",
+      password: "password123!",
+    });
+    const organiser3 = await userDAO.createUser({
+      name: "Organiser 3",
+      email: "organiser3@example.com",
+      password: "password123!",
+    });
+    const organiser4 = await userDAO.createUser({
+      name: "Organiser 4",
+      email: "organiser4@example.com",
+      password: "password123!",
+    });
+    const organiser5 = await userDAO.createUser({
+      name: "Organiser 5",
+      email: "organiser5@example.com",
+      password: "password123!",
     });
 
     // Set roles for users
     await userDAO.updateRole(adminUser._id, "admin");
-    await userDAO.updateRole(organiserUser._id, "organiser");
+    await userDAO.updateRole(organiser1._id, "organiser");
+    await userDAO.updateRole(organiser2._id, "organiser");
+    await userDAO.updateRole(organiser3._id, "organiser");
+    await userDAO.updateRole(organiser4._id, "organiser");
+    await userDAO.updateRole(organiser5._id, "organiser");
 
-    // Get IDs to assign to courses
-    const organiserIds = [adminUser._id, organiserUser._id]; 
+    // Add organisers to the courses
+    const organiserIds = [
+      organiser1._id,
+      organiser2._id,
+      organiser3._id,
+      organiser4._id,
+      organiser5._id,
+    ];
 
-    // Generate recurring courses with locations
-    for (const course of recurringCourses) {
+    // Generate the recurring courses and add attendees
+    for (let i = 0; i < recurringCourses.length; i++) {
+      const course = recurringCourses[i];
       const loc = insertedLocations[course.location];
-      await generateRecurringCourse(
+      const organiser = organiserIds[i]; // Use a different organiser for each course
+
+      // Generate the course
+      const generatedCourse = await generateRecurringCourse(
         course.name,
         course.description,
         loc.address,
@@ -136,35 +168,39 @@ const seed = async () => {
         course.time,
         course.courseCapacity,
         course.classCapacity,
-        organiserIds  
+        [organiser]
       );
+
+      // Define attendees for the course
+      const courseAttendees = [
+        { name: "Course Attendee 1", email: "course1@example.com" },
+        { name: "Course Attendee 2", email: "course2@example.com" },
+      ];
+
+      // Add attendees to the course (not using loops)
+      for (const attendee of courseAttendees) {
+        await courseDAO.addAttendee(generatedCourse._id, attendee);
+      }
     }
 
-    // Add the workshop
-    const workshopStartDateYear = "2025";
-    const workshopStartDateMonth = "05";
-    const workshopStartDateDay = "10";
-    const fullPrice = 100;
-    const classPrice = 20;
-    const length = 90;
-    const courseCapacity = 0;
-    const classCapacity = 50;
-    await generateWorkshopCourse(
-      "Freestyle Dance",
-      "A weekend of expressive freestyle dance.",
-      insertedLocations[1].address,
-      fullPrice,
-      classPrice,
-      length,
-      workshopStartDateYear,
-      workshopStartDateMonth,
-      workshopStartDateDay,
-      courseCapacity,
-      classCapacity,
-      organiserIds  
-    );
+    const classes = await classDAO.findAll();
+    if (classes && classes.length > 0) {
+      // Define attendees for classes
+      const classAttendees = [
+        { name: "Class Attendee 1", email: "class1a@example.com" },
+        { name: "Class Attendee 2", email: "class1b@example.com" },
+        { name: "Class Attendee 3", email: "class2a@example.com" },
+        { name: "Class Attendee 4", email: "class2b@example.com" },
+      ];
 
-    console.log("Dummy data has been added to the database.");
+      // Add attendees to all classes
+      for (const singleClass of classes) {
+        for (const attendee of classAttendees) {
+          await classDAO.addAttendee(singleClass._id, attendee);
+        }
+      }
+    }
+    console.log("Dummy data successfully added");
   } catch (err) {
     console.error("Error inserting dummy data:", err);
   }

@@ -141,7 +141,8 @@ class ClassDAO {
                 return reject(err);
               }
               logger.info({ op: "addAttendee", id, attendee }, "Added attendee");
-              resolve(true);
+              this.db.persistence.compactDatafile();
+              resolve("Success");
             }
           );
         })
@@ -169,6 +170,7 @@ class ClassDAO {
   
           if (numAffected > 0) {
             logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
+            this.db.persistence.compactDatafile();
             resolve("Success");
           } else {
             logger.warn({ op: "removeAttendee", id, email }, "No attendee found to remove");
@@ -188,7 +190,24 @@ class ClassDAO {
           return reject(err);
         }
         logger.info({ op: "cancel", id }, "Cancelled class");
-        resolve(true);
+        this.db.persistence.compactDatafile();
+        resolve("Success");
+      });
+    });
+  }
+
+  // Updates a field
+  async updateField(id, field, value) {
+    return new Promise((resolve, reject) => {
+      const update = { $set: { [field]: value } };
+      this.db.update({ _id: id }, update, {}, (err) => {
+        if (err) {
+          logger.error({ err, op: "updateField", id, field }, "Failed to update class field");
+          return reject(err);
+        }
+        logger.info({ op: "updateField", id, field, value }, "Updated class field");
+        this.db.persistence.compactDatafile();
+        resolve("Success");
       });
     });
   }

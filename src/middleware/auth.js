@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const courseDAO = require("../DAOs/CourseDAO");
+const classDAO = require("../DAOs/ClassDAO");
 require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -112,6 +114,55 @@ const isAuthenticated = (req, res, next) => {
   next();
 };
 
+const ensureCourseOrganiser = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId;
+    const courseId = req.params.id;
+
+    console.log("this is courseId", courseId);
+    const course = await courseDAO.findById(courseId);
+    console.log("this is course", course);
+    if (!course) throw new Error("Course not found");
+
+    if (!(course.organisers || []).includes(userId)) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      throw err;
+    }
+
+    next();
+  } catch (err) {
+    console.error("ensureCourseOrganiser failed:", err.message);
+    res.status(err.status || 403).send(err.message || "Forbidden");
+  }
+};
+
+const ensureClassOrganiser = async (req, res, next) => {
+  try {
+    const userId = req.user?.userId;
+    const classId = req.params.id;
+
+    const cls = await classDAO.findById(classId);
+    if (!cls) throw new Error("Class not found");
+
+    const course = await courseDAO.findById(cls.courseId);
+    if (!course) throw new Error("Parent course not found");
+
+    if (!(course.organisers || []).includes(userId)) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      throw err;
+    }
+
+    next();
+  } catch (err) {
+    console.error("ensureClassOrganiser failed:", err.message);
+    res.status(err.status || 403).send(err.message || "Forbidden");
+  }
+};
+
+
+
 module.exports = {
   hashPassword,
   comparePassword,
@@ -120,4 +171,6 @@ module.exports = {
   requireRole,
   isAuthenticated,
   handleRefreshToken,
+  ensureClassOrganiser,
+  ensureCourseOrganiser,
 };

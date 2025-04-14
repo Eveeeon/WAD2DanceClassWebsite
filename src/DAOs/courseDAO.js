@@ -69,15 +69,20 @@ class CourseDAO {
     return new Promise((resolve, reject) => {
       this.db.find({ organisers: organiserId }, (err, docs) => {
         if (err) {
-          logger.error({ err, op: "findByOrganiserId", organiserId }, "Failed to find courses by organiser ID");
+          logger.error(
+            { err, op: "findByOrganiserId", organiserId },
+            "Failed to find courses by organiser ID"
+          );
           return reject(err);
         }
-        logger.info({ op: "findByOrganiserId", organiserId, count: docs.length }, "Found courses for organiser");
+        logger.info(
+          { op: "findByOrganiserId", organiserId, count: docs.length },
+          "Found courses for organiser"
+        );
         resolve(docs);
       });
     });
   }
-  
 
   async findAll() {
     return new Promise((resolve, reject) => {
@@ -143,6 +148,7 @@ class CourseDAO {
                 { op: "addAttendee", id, attendee },
                 "Added attendee to course"
               );
+              this.db.persistence.compactDatafile();
               resolve("Success");
             }
           );
@@ -172,6 +178,7 @@ class CourseDAO {
             return reject(err);
           }
           logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
+          this.db.persistence.compactDatafile();
           resolve("Success");
         }
       );
@@ -198,8 +205,100 @@ class CourseDAO {
           { op: "cancelCourse", id },
           "Course (and classes) cancelled"
         );
+        this.db.persistence.compactDatafile();
         resolve("Success");
       });
+    });
+  }
+
+  // Updates a field
+  async updateField(id, field, value) {
+    return new Promise((resolve, reject) => {
+      const update = { $set: { [field]: value } };
+      this.db.update({ _id: id }, update, {}, (err) => {
+        if (err) {
+          logger.error(
+            { err, op: "updateField", id, field },
+            "Failed to update course field"
+          );
+          return reject(err);
+        }
+        logger.info(
+          { op: "updateField", id, field, value },
+          "Updated course field"
+        );
+        this.db.persistence.compactDatafile();
+        resolve("Success");
+      });
+    });
+  }
+
+  async addOrganiser(courseId, organiserId) {
+    return new Promise((resolve, reject) => {
+      this.db.update(
+        { _id: courseId },
+        { $addToSet: { organisers: organiserId } },
+        {},
+        (err) => {
+          if (err) {
+            logger.error(
+              { err, op: "addOrganiser", courseId, organiserId },
+              "Failed to add organiser"
+            );
+            return reject(err);
+          }
+          logger.info(
+            { op: "addOrganiser", courseId, organiserId },
+            "Organiser added"
+          );
+          this.db.persistence.compactDatafile();
+          resolve("Success");
+        }
+      );
+    });
+  }
+
+  async removeOrganiser(courseId, organiserId) {
+    return new Promise((resolve, reject) => {
+      this.findById(courseId)
+        .then((course) => {
+          if (!course || !Array.isArray(course.organisers)) {
+            return reject("Course not found or organisers missing");
+          }
+
+          // Reject if only one organiser remaining
+          if (course.organisers.length <= 1) {
+            return reject("Cannot remove the only organiser");
+          }
+
+          this.db.update(
+            { _id: courseId },
+            { $pull: { organisers: organiserId } },
+            {},
+            (err) => {
+              if (err) {
+                logger.error(
+                  { err, op: "removeOrganiser", courseId, organiserId },
+                  "Failed to remove organiser"
+                );
+                return reject(err);
+              }
+              logger.info(
+                { op: "removeOrganiser", courseId, organiserId },
+                "Organiser removed"
+              );
+              this.db.persistence.compactDatafile();
+              resolve("Success");
+            }
+          );
+        })
+        .catch((err) => {
+          logger.error(
+            { err, op: "removeOrganiser", courseId, organiserId },
+            "Error during removal"
+          );
+          reject(err);
+        });
     });
   }
 }
