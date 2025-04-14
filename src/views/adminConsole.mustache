@@ -2,8 +2,23 @@
 <body>
   {{> navBar}}
 
-  <main>
-    admin test
+  <main class="admin-console">
+    <h1>Unapproved Organisers</h1>
+
+    {{#unapproved}}
+      <ul>
+        <li>
+          <span>{{name}} - {{email}}</span>
+          <form method="POST" action="/adminConsole/approve/{{_id}}" style="display:inline;">
+            <button class="button-secondary" type="submit">Promote</button>
+          </form>
+        </li>
+      </ul>
+    {{/unapproved}}
+  
+    {{^unapproved}}
+      <p>No unapproved organisers.</p>
+    {{/unapproved}}
   </main>
 
   {{> footer}}

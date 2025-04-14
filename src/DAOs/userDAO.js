@@ -83,6 +83,16 @@ class UserDAO {
       });
     });
   }
+
+  async getAllUnapprovedOrganisers() {
+    return new Promise((resolve, reject) => {
+      this.db.find({ role: "unapproved_organiser" }, (err, docs) => {
+        if (err) return reject(err);
+        resolve(docs);
+      });
+    });
+  }
+
 }
 
 module.exports = new UserDAO();

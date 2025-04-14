@@ -388,6 +388,22 @@ html {
   background: rgb(14.53125, 15, 30.46875);
 }
 
+.button-secondary {
+  background: #f5f5f5;
+  color: #222222;
+  border: 1px solid #636363;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-width: 100px;
+  max-width: 200px;
+}
+.button-secondary:hover {
+  background: #eaeaea;
+}
+
 .close-btn {
   float: right;
   font-size: 1.25rem;
@@ -541,22 +557,6 @@ html {
 }
 .field-block .action-right {
   margin-left: auto;
-}
-
-.button-secondary {
-  background: #f5f5f5;
-  color: #222222;
-  border: 1px solid #636363;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  min-width: 100px;
-  max-width: 200px;
-}
-.button-secondary:hover {
-  background: #eaeaea;
 }
 
 .inline-form {
@@ -742,6 +742,41 @@ html {
 .homepage .home-button-main:hover {
   background-color: rgb(221.5, 221.5, 221.5);
   color: #1F2041;
+}
+
+.admin-console {
+  padding: 2rem;
+  background-color: #ececec;
+}
+
+.admin-console h1 {
+  font-size: 2.5rem;
+  color: #1F2041;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.admin-console ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-console li {
+  background-color: #f7f7f7;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-console p {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #636363;
 }
 
 /*# sourceMappingURL=main.css.map */

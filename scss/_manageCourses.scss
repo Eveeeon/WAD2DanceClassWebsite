@@ -48,23 +48,6 @@
   }
 }
 
-.button-secondary {
-  background: $modal-content-bg;
-  color: $text-color;
-  border: 1px solid $gray-color;
-  padding: $padding-x-small $padding-small;
-  border-radius: $border-radius;
-  font-size: $font-size-x-small;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  min-width: 100px;
-  max-width: 200px;
-
-  &:hover {
-    background: $dark-white-color;
-  }
-}
-
 .inline-form {
   display: inline;
 }

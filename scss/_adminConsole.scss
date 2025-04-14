@@ -1,0 +1,37 @@
+@use 'variables' as *;
+
+.admin-console {
+    padding: $padding-large;
+    background-color: $bg-color;
+  }
+  
+  .admin-console h1 {
+    font-size: $font-size-x-large;
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: $gap;
+  }
+  
+  .admin-console ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .admin-console li {
+    background-color: $white-color;
+    padding: $padding-medium;
+    margin-bottom: $gap-small;
+    border-radius: $border-radius;
+    box-shadow: $box-shadow;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .admin-console p {
+    text-align: center;
+    font-size: $font-size-medium;
+    color: $gray-color;
+  }
+  
