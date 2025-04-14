@@ -24,7 +24,7 @@ router.use(loginRegisterRoutes);
 
 router.use(isAuthenticated);
 
-// Organisers -todo
+// Organisers
 router.use(requireRole("organiser", "admin"));
 router.use(organiserRoutes);
 
