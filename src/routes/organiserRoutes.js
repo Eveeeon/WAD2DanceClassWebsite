@@ -11,11 +11,11 @@ router.post("/courses/:id/cancel", ensureCourseOrganiser, manageCoursesControlle
 router.post("/courses/:id/updateField", ensureCourseOrganiser, manageCoursesController.updateCourseField);
 router.post("/courses/:id/addOrganiser", ensureCourseOrganiser, manageCoursesController.addCourseOrganiser);
 router.post("/courses/:id/removeOrganiser", ensureCourseOrganiser, manageCoursesController.removeCourseOrganiser);
-router.post("/courses/:id/removeAttendee/:email", ensureCourseOrganiser, manageCoursesController.removeCourseAttendee);
+router.post("/courses/:id/removeAttendee/:email/remove", ensureCourseOrganiser, manageCoursesController.removeCourseAttendee);
 
 // Class management
 router.post("/classes/:id/cancel", ensureClassOrganiser, manageCoursesController.cancelClass);
 router.post("/classes/:id/updateField", ensureClassOrganiser, manageCoursesController.updateClassField);
-router.post("/classes/:id/removeAttendee/:email", ensureClassOrganiser, manageCoursesController.removeClassAttendee);
+router.post("/classes/:id/removeAttendee/:email/remove", ensureClassOrganiser, manageCoursesController.removeClassAttendee);
 
 module.exports = router;

@@ -167,7 +167,7 @@ class ClassDAO {
             );
             return reject(err);
           }
-  
+
           if (numAffected > 0) {
             logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
             this.db.persistence.compactDatafile();

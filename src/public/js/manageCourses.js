@@ -1,9 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const modal = document.getElementById('editModal');
-  const inputContainer = document.getElementById('inputContainer');
-  const fieldName = document.getElementById('editFieldName');
-  const form = document.getElementById('editForm');
+  const modal = document.getElementById("editModal");
+  const inputContainer = document.getElementById("inputContainer");
+  const fieldName = document.getElementById("editFieldName");
+  const form = document.getElementById("editForm");
+  let lastField = null;
+  let lastValue = null;
 
+  // Fetch the access token
+  const token = getCookie("accessToken");
+
+  // Debug: Log token value
+  console.log("Fetched Token:", token);
+
+  // Helper function to get a cookie value
   function getCookie(name) {
     const match = document.cookie.match(
       new RegExp("(^| )" + name + "=([^;]+)")
@@ -11,135 +20,162 @@ document.addEventListener("DOMContentLoaded", () => {
     return match ? match[2] : null;
   }
 
-  const token = getCookie("accessToken");
-
-  // Debug: Check if the token is being fetched correctly
-  console.log("Fetched Token:", token);  // <-- Add this line for debugging
-
-  let lastField = null;
-  let lastValue = null;
-
-  document.querySelectorAll("[data-edit]").forEach(btn => {
+  // Event listener for edit buttons
+  document.querySelectorAll("[data-edit]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const field = btn.dataset.field;
-      const id = btn.dataset.id;
-      const currentValue = btn.dataset.value;
-      const entityType = btn.dataset.entity;
-
-      openEditModal(field, id, currentValue, entityType);
+      const { field, id, value, entity } = btn.dataset;
+      openEditModal(field, id, value, entity);
     });
   });
 
-  // Add event listener for "Remove Organiser" and "Remove Attendee" buttons
-  document.querySelectorAll('[data-action="removeOrganiser"], [data-action="removeAttendee"]').forEach(btn => {
-    btn.addEventListener("click", (e) => {
-      const action = e.target.dataset.action;
-      const courseId = e.target.dataset.courseId;
-      const id = e.target.dataset.id;
-      const email = e.target.dataset.email;
-
-      openRemoveConfirmationModal(action, courseId, id, email);
-    });
-  });
-
-  function openRemoveConfirmationModal(action, courseId, id, email) {
-    const confirmationMessage = action === 'removeOrganiser' 
-      ? `Are you sure you want to remove this organiser?`
-      : `Are you sure you want to remove this attendee?`;
-
-    // Open modal with confirmation message
-    modal.style.display = 'block';
-    fieldName.innerText = confirmationMessage;
-
-    // Clear previous form data
-    inputContainer.innerHTML = '';
-
-    // Set up the form for the action (removal)
-    const formHtml = `
-      <input type="hidden" name="courseId" value="${courseId}">
-      <input type="hidden" name="id" value="${id}">
-      ${action === 'removeOrganiser' ? `<input type="hidden" name="email" value="${email}">` : ''}
-    `;
-    inputContainer.innerHTML = formHtml;
-
-    form.action = `/courses/${courseId}/${action === 'removeOrganiser' ? 'organisers' : 'attendees'}/${id}/remove`;
-
-    // Debug: Check if the action URL is being set correctly
-    console.log("Form action URL:", form.action);  // <-- Add this line for debugging
-
-    // Set up the form submission
-    form.onsubmit = (e) => {
-      e.preventDefault();
-
-      fetch(form.action, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ courseId, id, email })
-      })
-      .then(async (response) => {
-        if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Server error: ${response.status} - ${errorText}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.success) {
-          closeModal();
-          window.location.reload();
-        } else {
-          throw new Error(data.message || "Unexpected error");
-        }
-      })
-      .catch(error => {
-        console.error('Error submitting form:', error);
-        alert('Failed to remove the organiser/attendee. Please try again.');
+  // Event listener for removing organisers and attendees
+  document
+    .querySelectorAll(
+      '[data-action="removeOrganiser"], [data-action="removeAttendee"]'
+    )
+    .forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        const { action, courseId, id, email } = e.target.dataset;
+        openRemoveConfirmationModal(action, courseId, id, email);
       });
-    };
-  }
+    });
 
-  // Close the modal
-  document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
-
+  // Open the edit modal with proper input fields
   const openEditModal = (field, id, currentValue, entityType) => {
     fieldName.innerText = field;
   
-    const valueToUse = (field === lastField && lastValue !== null) ? lastValue : currentValue;
+    let valueToUse =
+      field === lastField && lastValue !== null ? lastValue : currentValue;
   
-    let inputHtml = '';
-    if (field.includes("date")) {
-      inputHtml = `<input type="datetime-local" name="value" value="${valueToUse}" required>`;
-    } else {
-      inputHtml = `<input name="value" value="${valueToUse}" required>`;
+    // If date field, convert epoch to datetime-local format for input
+    const isDateField = field.toLowerCase().includes("date");
+    if (isDateField && !isNaN(valueToUse)) {
+      const date = new Date(parseInt(valueToUse));
+      valueToUse = date.toISOString().slice(0, 16); // Format for datetime-local input
     }
   
-    // Add hidden input for `field`
-    inputHtml += `<input type="hidden" name="field" value="${field}">`;
+    const inputHtml = isDateField
+      ? `<input type="datetime-local" name="value" value="${valueToUse}" required>`
+      : `<input name="value" value="${valueToUse}" required>`;
   
-    inputContainer.innerHTML = inputHtml;
+    // Render inputs in modal
+    inputContainer.innerHTML = `
+      ${inputHtml}
+      <input type="hidden" name="field" value="${field}">
+    `;
   
     const inputElement = inputContainer.querySelector('[name="value"]');
-    inputElement?.addEventListener('input', (e) => {
+    inputElement?.addEventListener("input", (e) => {
       lastValue = e.target.value;
     });
   
     lastField = field;
+    form.action = `/${
+      entityType === "class" ? "classes" : entityType + "s"
+    }/${id}/updateField`;
+    modal.style.display = "block";
   
-    form.action = `/${entityType === "class" ? "classes" : entityType + "s"}/${id}/updateField`;
+    // Prevent default submit & send fetch instead
+    form.onsubmit = (e) => {
+      e.preventDefault();
+  
+      let value = inputElement.value;
+  
+      // Convert datetime-local string to epoch if it's a date field
+      if (isDateField) {
+        value = new Date(value).getTime();
+      }
+  
+      submitForm(form.action, {
+        field,
+        value,
+      });
+    };
+  };
+  
 
-    modal.style.display = 'block';
+  // Open confirmation modal for removal actions (Organiser/Attendee)
+  const openRemoveConfirmationModal = (action, courseId, id, email) => {
+    const confirmationMessage =
+      action === "removeOrganiser"
+        ? `Are you sure you want to remove this organiser?`
+        : `Are you sure you want to remove this attendee?`;
+  
+    // Set up the modal content for removal
+    fieldName.innerText = confirmationMessage;
+    inputContainer.innerHTML = `
+      <input type="hidden" name="courseId" value="${courseId}">
+      <input type="hidden" name="id" value="${id}">
+      ${
+        action === "removeOrganiser"
+          ? `<input type="hidden" name="email" value="${email}">`
+          : ""
+      }
+    `;
+  
+    form.action = `/courses/${courseId}/${
+      action === "removeOrganiser" ? "organisers" : "attendees"
+    }/${id}/remove`;
+  
+    modal.style.display = "block";
+  
+    // Handle form submission
+    form.onsubmit = (e) => {
+      e.preventDefault();
+  
+      const data = {
+        courseId,
+        id,
+        ...(action === "removeOrganiser" && { email }),
+      };
+  
+      submitForm(form.action, data);
+    };
+  };
+  
+
+  // General form submission handler - prevents default and sends fetch request to prevent redirect
+  const submitForm = (actionUrl, data) => {
+    fetch(actionUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+      redirect: "manual"
+    })
+      .then(async (response) => {
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
+        const responseData = await response.json();
+        console.log("Response Data:", responseData);
+        if (responseData.success) {
+          closeModal();
+          window.location.reload();
+        } else {
+          alert(responseData.message || "An error occurred");
+          throw new Error(responseData.message || "Unexpected error");
+        }
+      }).catch((error) => {
+        console.error("Error submitting form:", error);
+        alert("An error occurred. Please try again.");
+      });
   };
 
-  function closeModal() {
-    modal.style.display = 'none';
+  // Close the modal
+  const closeModal = () => {
+    modal.style.display = "none";
     lastField = null;
     lastValue = null;
-  }
+  };
 
+  // Event listener to close the modal if clicked outside
   window.addEventListener("click", (e) => {
     if (e.target === modal) closeModal();
   });
+
+  // Close modal on Cancel button click
+  document
+    .getElementById("closeModalBtn")
+    ?.addEventListener("click", closeModal);
 });

@@ -67,7 +67,7 @@
       <ul>
         {{#attendees}}
           <li>{{name}} ({{email}})
-            <form method="POST" action="/courses/{{_id}}/removeAttendee/{{email}}" style="display:inline;">
+            <form method="POST" action="/courses/{{_id}}/removeAttendee/{{email}}/remove" style="display:inline;">
               <button type="submit">Remove</button>
             </form>
           </li>
@@ -117,7 +117,7 @@
             <ul>
               {{#attendees}}
                 <li>{{name}} ({{email}})
-                  <form method="POST" action="/classes/{{_id}}/removeAttendee/{{email}}" style="display:inline;">
+                  <form method="POST" action="/classes/{{_id}}/removeAttendee/{{email}}/remove" style="display:inline;">
                     <button type="submit">Remove</button>
                   </form>
                 </li>
