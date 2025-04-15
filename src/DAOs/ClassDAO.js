@@ -17,6 +17,7 @@ class ClassDAO {
           return reject(err);
         }
         logger.info({ op: "insert", data: result }, "Inserted class(es)");
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve(result);
       });
@@ -30,10 +31,7 @@ class ClassDAO {
           logger.error({ err, op: "findAll" }, "Failed to read all classes");
           return reject(err);
         }
-        logger.info(
-          { op: "findAll", count: docs.length },
-          "Read all classes"
-        );
+        logger.info({ op: "findAll", count: docs.length }, "Read all classes");
         resolve(docs);
       });
     });
@@ -93,7 +91,10 @@ class ClassDAO {
   async findByStartDateRange(startDate, endDate) {
     return new Promise((resolve, reject) => {
       this.db.find(
-        { startDateTime: { $gte: startDate, $lte: endDate }, active: { $ne: false } },
+        {
+          startDateTime: { $gte: startDate, $lte: endDate },
+          active: { $ne: false },
+        },
         (err, docs) => {
           if (err) {
             logger.error(
@@ -115,7 +116,7 @@ class ClassDAO {
   async addAttendee(id, attendee) {
     return new Promise((resolve, reject) => {
       this.findById(id)
-        .then(classDoc => {
+        .then((classDoc) => {
           // Check if already registered
           const existingAttendee = classDoc.attendees.find(
             (existing) => existing.email === attendee.email
@@ -127,7 +128,7 @@ class ClassDAO {
             );
             return reject("Already registered");
           }
-  
+
           this.db.update(
             { _id: id },
             { $push: { attendees: attendee } },
@@ -140,14 +141,21 @@ class ClassDAO {
                 );
                 return reject(err);
               }
-              logger.info({ op: "addAttendee", id, attendee }, "Added attendee");
+              logger.info(
+                { op: "addAttendee", id, attendee },
+                "Added attendee"
+              );
+              // Clean up database
               this.db.persistence.compactDatafile();
               resolve("Success");
             }
           );
         })
-        .catch(err => {
-          logger.error({ err, op: "addAttendee", id, attendee }, "Failed to add attendee");
+        .catch((err) => {
+          logger.error(
+            { err, op: "addAttendee", id, attendee },
+            "Failed to add attendee"
+          );
           reject(err);
         });
     });
@@ -169,11 +177,18 @@ class ClassDAO {
           }
 
           if (numAffected > 0) {
-            logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
+            logger.info(
+              { op: "removeAttendee", id, email },
+              "Removed attendee"
+            );
+            // Clean up database
             this.db.persistence.compactDatafile();
             resolve("Success");
           } else {
-            logger.warn({ op: "removeAttendee", id, email }, "No attendee found to remove");
+            logger.warn(
+              { op: "removeAttendee", id, email },
+              "No attendee found to remove"
+            );
             resolve("Not Found");
           }
         }
@@ -190,6 +205,7 @@ class ClassDAO {
           return reject(err);
         }
         logger.info({ op: "cancel", id }, "Cancelled class");
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve("Success");
       });
@@ -202,10 +218,17 @@ class ClassDAO {
       const update = { $set: { [field]: value } };
       this.db.update({ _id: id }, update, {}, (err) => {
         if (err) {
-          logger.error({ err, op: "updateField", id, field }, "Failed to update class field");
+          logger.error(
+            { err, op: "updateField", id, field },
+            "Failed to update class field"
+          );
           return reject(err);
         }
-        logger.info({ op: "updateField", id, field, value }, "Updated class field");
+        logger.info(
+          { op: "updateField", id, field, value },
+          "Updated class field"
+        );
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve("Success");
       });

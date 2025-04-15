@@ -10,9 +10,13 @@ class LocationDAO {
     return new Promise((resolve, reject) => {
       this.db.insert(location, (err, newDoc) => {
         if (err) {
-          logger.error({ err, op: "insert", location }, "Failed to insert location");
+          logger.error(
+            { err, op: "insert", location },
+            "Failed to insert location"
+          );
           return reject(err);
         }
+        // Clean up database
         this.db.persistence.compactDatafile();
         logger.info({ op: "insert", location: newDoc }, "Inserted location");
         resolve(newDoc);
@@ -27,7 +31,10 @@ class LocationDAO {
           logger.error({ err, op: "findAll" }, "Failed to read all locations");
           return reject(err);
         }
-        logger.info({ op: "findAll", count: docs.length }, "Read all locations");
+        logger.info(
+          { op: "findAll", count: docs.length },
+          "Read all locations"
+        );
         resolve(docs);
       });
     });
@@ -37,7 +44,10 @@ class LocationDAO {
     return new Promise((resolve, reject) => {
       this.db.findOne({ _id: id }, (err, doc) => {
         if (err) {
-          logger.error({ err, op: "findById", id }, "Failed to find location by ID");
+          logger.error(
+            { err, op: "findById", id },
+            "Failed to find location by ID"
+          );
           return reject(err);
         }
         logger.info({ op: "findById", id }, "Found location");
@@ -53,6 +63,7 @@ class LocationDAO {
           logger.error({ err, op: "delete", id }, "Failed to delete location");
           return reject(err);
         }
+        // Clean up database
         this.db.persistence.compactDatafile();
         logger.info({ op: "delete", id }, "Deleted location");
         resolve("Success");

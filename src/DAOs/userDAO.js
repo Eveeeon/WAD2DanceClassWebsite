@@ -24,6 +24,8 @@ class UserDAO {
     return new Promise((resolve, reject) => {
       this.db.insert(newUser, (err, doc) => {
         if (err) return reject(err);
+        // Clean up database
+        this.db.persistence.compactDatafile();
         resolve(doc);
       });
     });
@@ -55,6 +57,8 @@ class UserDAO {
         {},
         (err) => {
           if (err) return reject(err);
+          // Clean up database
+          this.db.persistence.compactDatafile();
           resolve();
         }
       );
@@ -69,6 +73,8 @@ class UserDAO {
         {},
         (err) => {
           if (err) return reject(err);
+          // Clean up database
+          this.db.persistence.compactDatafile();
           resolve();
         }
       );
@@ -92,7 +98,6 @@ class UserDAO {
       });
     });
   }
-
 }
 
 module.exports = new UserDAO();

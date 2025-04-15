@@ -21,6 +21,7 @@ class CourseDAO {
           { op: "insert", collection: "courses", data: newDoc },
           "Inserted course"
         );
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve(newDoc);
       });
@@ -45,6 +46,7 @@ class CourseDAO {
             { op: "updateClassIds", courseId, classIds },
             "Updated classIds"
           );
+          // Clean up database
           this.db.persistence.compactDatafile();
           resolve(count);
         }
@@ -148,6 +150,7 @@ class CourseDAO {
                 { op: "addAttendee", id, attendee },
                 "Added attendee to course"
               );
+              // Clean up database
               this.db.persistence.compactDatafile();
               resolve("Success");
             }
@@ -178,6 +181,7 @@ class CourseDAO {
             return reject(err);
           }
           logger.info({ op: "removeAttendee", id, email }, "Removed attendee");
+          // Clean up database
           this.db.persistence.compactDatafile();
           resolve("Success");
         }
@@ -205,6 +209,7 @@ class CourseDAO {
           { op: "cancelCourse", id },
           "Course (and classes) cancelled"
         );
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve("Success");
       });
@@ -227,6 +232,7 @@ class CourseDAO {
           { op: "updateField", id, field, value },
           "Updated course field"
         );
+        // Clean up database
         this.db.persistence.compactDatafile();
         resolve("Success");
       });
@@ -251,6 +257,7 @@ class CourseDAO {
             { op: "addOrganiser", courseId, organiserId },
             "Organiser added"
           );
+          // Clean up database
           this.db.persistence.compactDatafile();
           resolve("Success");
         }
@@ -287,6 +294,7 @@ class CourseDAO {
                 { op: "removeOrganiser", courseId, organiserId },
                 "Organiser removed"
               );
+              // Clean up database
               this.db.persistence.compactDatafile();
               resolve("Success");
             }
