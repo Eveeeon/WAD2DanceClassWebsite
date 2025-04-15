@@ -1,6 +1,6 @@
-const courseDAO = require("../DAOs/CourseDAO");
-const classDAO = require("../DAOs/ClassDAO");
-const userDAO = require("../DAOs/userDAO");
+const courseDAO = require("@daos/CourseDAO");
+const classDAO = require("@daos/ClassDAO");
+const userDAO = require("@daos/userDAO");
 const moment = require("moment");
 
 const getManageCourses = async (req, res) => {

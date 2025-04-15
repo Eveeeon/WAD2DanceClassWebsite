@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const courseDAO = require("../DAOs/CourseDAO");
-const classDAO = require("../DAOs/ClassDAO");
+const courseDAO = require("@daos/CourseDAO");
+const classDAO = require("@daos/ClassDAO");
 require("dotenv").config();
 
 const JWT_SECRET = process.env.JWT_SECRET;

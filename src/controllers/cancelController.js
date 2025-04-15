@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const classDAO = require("../DAOs/ClassDAO");
-const courseDAO = require("../DAOs/CourseDAO");
+const classDAO = require("@daos/ClassDAO");
+const courseDAO = require("@daos/CourseDAO");
 
 const cancelCourse = async (req, res) => {
   const { token } = req.params;

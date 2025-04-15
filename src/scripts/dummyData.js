@@ -1,8 +1,9 @@
-const { generateRecurringCourse } = require("../middleware/generateCourses.js");
-const locationDAO = require("../DAOs/locationDAO");
-const userDAO = require("../DAOs/userDAO");
-const courseDAO = require("../DAOs/CourseDAO");
-const classDAO = require("../DAOs/ClassDAO");
+require('module-alias/register');
+const { generateRecurringCourse } = require("@middleware/generateCourses.js");
+const locationDAO = require("@daos/locationDAO");
+const userDAO = require("@daos/userDAO");
+const courseDAO = require("@daos/CourseDAO");
+const classDAO = require("@daos/ClassDAO");
 
 // Define location data
 const locationStrings = [

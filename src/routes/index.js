@@ -5,7 +5,7 @@ const publicRoutes = require("./publicRoutes");
 const loginRegisterRoutes = require("./loginRegisterRoutes");
 const organiserRoutes = require("./organiserRoutes");
 const adminRoutes = require("./adminRoutes");
-const { verifyToken, isAuthenticated, requireRole, handleRefreshToken } = require("../middleware/auth");
+const { verifyToken, isAuthenticated, requireRole, handleRefreshToken } = require("@middleware/auth");
 
 router.use(handleRefreshToken)
 router.use(verifyToken);

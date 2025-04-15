@@ -1,6 +1,6 @@
 const moment = require("moment");
 const validator = require("validator");
-const { generateRecurringCourse, generateWorkshopCourse } = require("../middleware/generateCourses");
+const { generateRecurringCourse, generateWorkshopCourse } = require("@middleware/generateCourses");
 
 const getNewWorkshopForm = (req, res) => {
   res.render("newWorkshopCourse", { user: req.user });

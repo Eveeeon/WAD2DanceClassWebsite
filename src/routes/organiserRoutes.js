@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const manageCoursesController = require("../controllers/manageCoursesController");
-const { ensureCourseOrganiser, ensureClassOrganiser } = require("../middleware/auth");
-const newCourseController = require("../controllers/newCourseController");
+const manageCoursesController = require("@controllers/manageCoursesController");
+const { ensureCourseOrganiser, ensureClassOrganiser } = require("@middleware/auth");
+const newCourseController = require("@controllers/newCourseController");
 
 // View
 router.get("/manageCourses", manageCoursesController.getManageCourses);

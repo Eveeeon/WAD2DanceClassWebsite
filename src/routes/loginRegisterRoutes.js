@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const loginRegisterController = require("../controllers/loginRegisterController");
+const loginRegisterController = require("@controllers/loginRegisterController");
 
 // Views
 router.get("/login", loginRegisterController.renderLogin);

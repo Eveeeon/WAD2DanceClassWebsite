@@ -1,3 +1,5 @@
+// For deployments to ensure importing across different environments
+require('module-alias/register');
 const app = require("./app");
 const dotenv = require("dotenv");
 

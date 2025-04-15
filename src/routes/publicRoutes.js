@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const homeController = require("../controllers/homeController");
-const aboutController = require("../controllers/aboutController");
-const classController = require("../controllers/classController");
-const courseController = require("../controllers/courseController");
-const cancelController = require("../controllers/cancelController");
+const homeController = require("@controllers/homeController");
+const aboutController = require("@controllers/aboutController");
+const classController = require("@controllers/classController");
+const courseController = require("@controllers/courseController");
+const cancelController = require("@controllers/cancelController");
 
 // Views
 router.get("/", homeController.getHome);

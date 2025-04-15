@@ -1,7 +1,7 @@
-const courseDAO = require("../DAOs/CourseDAO.js");
+const courseDAO = require("@daos/CourseDAO");
 const moment = require("moment");
 const validator = require("validator");
-const { sendCourseRegistrationEmail } = require("../middleware/emailHandler");
+const { sendCourseRegistrationEmail } = require("@middleware/emailHandler");
 require("dotenv").config();
 
 // Fetch all courses

@@ -1,4 +1,4 @@
-const UserDAO = require("../DAOs/userDAO");
+const UserDAO = require("@daos/userDAO");
 
 const getAdminConsole = async (req, res) => {
   try {

@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const moment = require("moment");
-const classDAO = require("../DAOs/ClassDAO");
+const classDAO = require("@daos/ClassDAO");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({

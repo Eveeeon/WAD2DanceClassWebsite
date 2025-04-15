@@ -1,4 +1,4 @@
-const locationDAO = require('../DAOs/locationDAO');
+const locationDAO = require("@daos/locationDAO");
 
 const getAbout = async (req, res) => {
   try {

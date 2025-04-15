@@ -1,13 +1,13 @@
-const userDAO = require("../DAOs/userDAO");
+const userDAO = require("@daos/userDAO");
 const validator = require("validator");
 
 const {
   hashPassword,
   comparePassword,
   generateTokens,
-} = require("../middleware/auth");
+} = require("@middleware/auth");
 
-const { sendPasswordResetEmail } = require("../middleware/emailHandler");
+const { sendPasswordResetEmail } = require("@middleware/emailHandler");
 
 const jwt = require("jsonwebtoken");
 require("dotenv").config();

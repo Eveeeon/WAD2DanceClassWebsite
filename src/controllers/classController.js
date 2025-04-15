@@ -1,8 +1,8 @@
-const classDAO = require("../DAOs/ClassDAO");
-const courseDAO = require("../DAOs/CourseDAO");
+const classDAO = require("@daos/ClassDAO");
+const courseDAO = require("@daos/CourseDAO");
 const moment = require("moment");
 const validator = require("validator");
-const { sendClassRegistrationEmail } = require("../middleware/emailHandler");
+const { sendClassRegistrationEmail } = require("@middleware/emailHandler");
 
 // Fetch all classes and map course IDs to names, can take a month as a query parameter
 // Default to the current month if not provided

@@ -1,8 +1,8 @@
 const moment = require("moment");
-const classDAO = require("../DAOs/ClassDAO");
-const courseDAO = require("../DAOs/CourseDAO");
-const DanceClass = require("../models/ClassModel");
-const Course = require("../models/CourseModel");
+const classDAO = require("@daos/ClassDAO");
+const courseDAO = require("@daos/CourseDAO");
+const DanceClass = require("@models/ClassModel");
+const Course = require("@models/CourseModel");
 
 const generateRecurringCourse = async (
   name,
