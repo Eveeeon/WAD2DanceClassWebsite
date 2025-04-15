@@ -1,5 +1,5 @@
 const Datastore = require("gray-nedb");
-const classDAO = require("./ClassDAO");
+const classDAO = require("./lassDAO");
 const logger = require("pino")();
 
 class CourseDAO {
