@@ -7,6 +7,7 @@ const session = require("express-session");
 const dotenv = require("dotenv");
 const indexRoutes = require("./routes/index");
 const cookieParser = require('cookie-parser');
+const favicon = require('serve-favicon');
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Public
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Mustache
