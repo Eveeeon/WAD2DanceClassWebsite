@@ -35,11 +35,11 @@ const createWorkshopCourse = async (req, res) => {
     return res.status(400).json({ success: false, message: "Class length must be a positive integer." });
   }
 
-  if (!validator.isInt(courseCapacity.toString(), { min: 1 })) {
+  if (!validator.isInt(courseCapacity.toString(), { min: 0 })) {
     return res.status(400).json({ success: false, message: "Course capacity must be a positive integer." });
   }
 
-  if (!validator.isInt(classCapacity.toString(), { min: 1 })) {
+  if (!validator.isInt(classCapacity.toString(), { min: 0 })) {
     return res.status(400).json({ success: false, message: "Class capacity must be a positive integer." });
   }
 
@@ -102,15 +102,17 @@ const createRecurringCourse = async (req, res) => {
     return res.status(400).json({ success: false, message: "Class capacity must be a positive integer." });
   }
 
-  const startMoment = moment(startDate, "YYYY-MM-DD");
+  const startMoment = moment(startDate, "dd-MM-YYYY");
 
   if (!startMoment.isValid()) {
     return res.status(400).json({ success: false, message: "Invalid start date." });
   }
 
-  if (!validator.isISO8601(time, { strict: true })) {
+  const timeRegex = /^([01]?[0-9]|2[0-3]):([0-5][0-9])$/;
+
+  if (!timeRegex.test(time)) {
     return res.status(400).json({ success: false, message: "Invalid time format. Use HH:mm." });
-  }
+  }  
 
   try {
     const course = await generateRecurringCourse(
