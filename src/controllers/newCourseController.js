@@ -94,11 +94,11 @@ const createRecurringCourse = async (req, res) => {
     return res.status(400).json({ success: false, message: "Class length must be a positive integer." });
   }
 
-  if (!validator.isInt(courseCapacity.toString(), { min: 1 })) {
+  if (!validator.isInt(courseCapacity.toString(), { min: 0 })) {
     return res.status(400).json({ success: false, message: "Course capacity must be a positive integer." });
   }
 
-  if (!validator.isInt(classCapacity.toString(), { min: 1 })) {
+  if (!validator.isInt(classCapacity.toString(), { min: 0 })) {
     return res.status(400).json({ success: false, message: "Class capacity must be a positive integer." });
   }
 
