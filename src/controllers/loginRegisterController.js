@@ -64,7 +64,13 @@ const register = async (req, res) => {
       errors.push({ msg: "Passwords do not match" });
     }
     const passwordErrors = validatePassword(password);
-    passwordErrors.forEach((msg) => errors.push({ msg }));
+    passwordErrors.forEach((error) => {
+      if (typeof error === 'object' && error.msg) {
+        errors.push({ msg: error.msg });
+      } else {
+        errors.push({ msg: String(error) });
+      }
+    });
 
     if (errors.length > 0) {
       return res.status(400).render("register", {
