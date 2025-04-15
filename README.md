@@ -15,27 +15,34 @@ All the above and:
 - View and remove all attendees to owned courses and classes
 - Add and remove organisers to courses
 ### Authenticated admins
-All the above and
+All the above and:
 - Approve newly registered unapproved organisers
 
 ## Installation
 
 ### Clone the repository
 git clone https://github.com/Eveeeon/WAD2DanceClassWebsite.git
+
 cd WAD2DanceClassWebsite
 
 ### Pre-requesites
 Create a gmail account and enable and create an app password, this will enable the emailing feature to work, use the app password in the following .env file
+
 Follow the link:
+
 https://myaccount.google.com/apppasswords
 
 ### Configuring
 Create a .env file in the root (above src) and populate the following values inside:
 
 JWT_SECRET=your_jwt_secret_here
+
 EMAIL_USER=your_gmail@gmail.com
+
 EMAIL_PASS=your_app_password_here
+
 BASE_URL=http://localhost:3000
+
 NODE_ENV=development
 
 ### Optional - populate with test data before running
@@ -43,10 +50,12 @@ npm run dummyData
 
 ### Running
 npm install
+
 npm run src/index.js
 
 ### Running for development (for automatic changes)
 npm run dev
+
 npm run src/index.js
 
 ## License

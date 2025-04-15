@@ -1,5 +1,5 @@
 require('module-alias/register');
-const { generateRecurringCourse } = require("@middleware/generateCourses.js");
+const { generateRecurringCourse,  generateWorkshopCourse } = require("@middleware/generateCourses.js");
 const locationDAO = require("@daos/locationDAO");
 const userDAO = require("@daos/userDAO");
 const courseDAO = require("@daos/CourseDAO");
@@ -201,6 +201,31 @@ const seed = async () => {
         }
       }
     }
+
+    // Add the workshop
+    const workshopStartDateYear = "2025";
+    const workshopStartDateMonth = "05";
+    const workshopStartDateDay = "10";
+    const fullPrice = 100;
+    const classPrice = 20;
+    const length = 90;
+    const courseCapacity = 0;
+    const classCapacity = 50;
+    await generateWorkshopCourse(
+      "Freestyle Dance",
+      "A weekend of expressive freestyle dance.",
+      insertedLocations[1].address,
+      fullPrice,
+      classPrice,
+      length,
+      workshopStartDateYear,
+      workshopStartDateMonth,
+      workshopStartDateDay,
+      courseCapacity,
+      classCapacity,
+      organiserIds[1]  
+    );
+
     console.log("Dummy data successfully added");
   } catch (err) {
     console.error("Error inserting dummy data:", err);
