@@ -223,7 +223,7 @@ const seed = async () => {
       workshopStartDateDay,
       courseCapacity,
       classCapacity,
-      organiserIds[1]  
+      organiserIds  
     );
 
     console.log("Dummy data successfully added");
